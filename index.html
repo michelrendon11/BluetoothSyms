@@ -7,17 +7,15 @@
 </head>
 <body>
     <h1>SYMSs</h1>
-    <button id="controlButton">find devices</button>
+    <button id="findDevices">Find Devices</button>
     <p class="list"></p>
 
-    <script>
-        const controlButton = document.getElementById("controlButton");
-        controlButton.addEventListener("click", BLEManager);
-
-        async function BLEManager() {
-            const device = await navigator.bluetooth.requestDevice({acceptAllDevices: true});
+     <script>
+        const findSyms = document.getElementById("findDevices");
+        findSyms.addEventListener("click", FindBluetoothSyms);
+        async function FindBluetoothSyms() {
+            const devices = await navigator.bluetooth.requestDevice({acceptAllDevices: true});
         } 
     </script>
-    
 </body>
 </html>

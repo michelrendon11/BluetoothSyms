@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <h1>SYMSs</h1>
+    <button id="controlButton">find devices</button>
+    <p class="list"></p>
+
+    <script>
+        const controlButton = document.getElementById("controlButton");
+        controlButton.addEventListener("click", BLEManager);
+
+        async function BLEManager() {
+            const device = await navigator.bluetooth.requestDevice({acceptAllDevices: true});
+        } 
+    </script>
+    
+</body>
+</html>

@@ -6,37 +6,39 @@
     <style>
         #title{ font-family: "palatino"; background-color: rgba(10, 10, 228, 0.759); width: 100%; height: auto; padding: 0.1rem 0; text-align: center;}
         h1{ color: white; text-shadow: 3px 2px 2px rgb(8, 54, 88);}
-        button{ padding: 10px; font-size: 20px; border-radius: 10px; font-weight: bold; margin: auto; margin-top: 5px; margin-right: 10px; background-image: linear-gradient(rgba(88, 29, 226, 0.71), rgb(240, 240, 240)); width: 12rem;}
-        #findEverything:hover, #findSyms:hover{ box-shadow: 5px 5px 20px rgb(0, 0, 0); color: white;}
-        #findEverything:active{ box-shadow: 10px 10px 20px rgb(0, 0, 0); color: green;}
-        #findSyms:active{ box-shadow: 10px 10px 20px rgb(0, 0, 0); color: blue;}
+        button{ padding: 10px; font-size: 20px; border-radius: 10px; font-weight: bold; margin: auto; margin-top: 5px; background-image: linear-gradient(rgba(6, 6, 247, 0.71), rgb(240, 240, 240)); width: 12rem; }
+        #findEverything:hover, #findSyms:hover{ box-shadow: 5px 5px 20px rgb(0, 0, 0); color: white; }
+        #findEverything:active{ box-shadow: 10px 10px 20px rgb(0, 0, 0); color: green; }
+        #findSyms:active{ box-shadow: 10px 10px 20px rgb(0, 0, 0); color: blue; }
     </style>
     <title>Tank Sentry</title>
 </head>
 <body>
     <div id="title"> <h1>TANK SENTRY</h1> </div>
-    <button id="findEverything" onclick="findAllDevices()">Find Everyting</button>
-    <button id="findSyms" onclick="findAllSyms()">Find SYMs</button>
-    <p id="list"></p>
+    <div id="findButtons">
+        <button id="findEverything" onclick="findAllDevices()">Find Everyting</button>
+        <button id="findSyms" onclick="findAllSyms()">Find SYMs</button>
+    </div>
+    <div id="info">
+        <p id="list"></p>
+    </div>
 
     <script>
-        async function findAllDevices() { const allDevices = await navigator.bluetooth.requestDevice({ acceptAllDevices: true }) };
-
         async function findAllSyms() {
+            const hasBluetooth = navigator.bluetooth.getAvailability()
             const symName = ' SYMU';
-            const allSyms = await navigator.bluetooth.requestDevice({ filters: [{namePrefix: symName}] })
-            .then(device=>{ 
-                console.log(device.name); 
-                displaySymName(device.name); 
-                return device.gatt.connect(); })
-            .then(value => { console.log(value); })
-            .catch(error => { console.error(error); });
+            if(hasBluetooth){
+                const allSyms = await navigator.bluetooth.requestDevice({ filters: [{namePrefix: symName}] })
+                .then(device=>{ displaySymName(device); return device.gatt.connect(); })
+                .then(value => { console.log(value); })
+                .catch(error => { console.error(error); });
+            }
         } 
-
         function displaySymName(name){
-            document.getElementById("list").innerHTML = name;
+            document.getElementById("list").innerHTML = "Name: " + name.name + "<br/>" + "ID: " + name.id;
         }
-
+        async function findAllDevices() { const allDevices = await navigator.bluetooth.requestDevice({ acceptAllDevices: true }) 
+        };
     </script>
     
 </body>

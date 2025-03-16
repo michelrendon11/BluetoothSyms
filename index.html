@@ -20,30 +20,50 @@
     <div id="findButtons">
         <button id="findEverything" onclick="findAllDevices()">Find Everyting</button>
         <button id="findSyms" onclick="findAllSyms()">Find SYMs</button>
+        <button id="test" onclick="test()">Test</button>
     </div>
     <div>
         <p>chrome://bluetooth-internals/#devices</p>
         <p class="front">Name:<span id="name"></span></p>
         <p class="front">ID:<span id="info"></span></p>
+        <p id="displayInfo"></p>
     </div>
 
     <script>
+        async function test(){
+            const symName = ' SYMU';
+            const options = {
+                filters: [
+                        {namePrefix: symName,},
+                        {services: ['00001800-0000-1000-8000-00805f9b34fb']},
+                        {services: ['0000180a-0000-1000-8000-00805f9b34fb']},
+                        {services: ['49535343-fe7d-4ae5-8fa9-9fafd205e455']}]};
+            const device = await navigator.bluetooth.requestDevice(options);
+            const server = await device.gatt.connect();
+            displaySymName(device);
+            const service = await server.getPrimaryService('49535343-fe7d-4ae5-8fa9-9fafd205e455');
+            const characteristic = await service.getCharacteristic('49535343-6daa-4d02-abf6-19569aca69fe');
+            console.log(characteristic);
+            // const descriptor = await characteristic.writeValueWithResponse(new ArrayBuffer()['hh']);
+            // console.log(descriptor);
+        }
         async function findAllSyms() {
-            const hasBluetooth = navigator.bluetooth.getAvailability()
+            const hasBluetooth = navigator.bluetooth.getAvailability();
             const symName = ' SYMU';
             if(hasBluetooth){
-                const allSyms = await navigator.bluetooth.requestDevice({ filters: [{ namePrefix: symName}]})
+                const allSyms = await navigator.bluetooth.requestDevice({ 
+                    filters: [
+                        {namePrefix: symName,},
+                        {services: ['00001800-0000-1000-8000-00805f9b34fb']},
+                        {services: ['0000180a-0000-1000-8000-00805f9b34fb']},
+                        {services: ['49535343-fe7d-4ae5-8fa9-9fafd205e455']}]})
                 .then(device=>{ displaySymName(device); return device.gatt.connect(); })
                 .then(value => { console.log(value); })
                 .catch(error => { console.error(error); });
             }
         } 
-        function displaySymName(name){
-            document.getElementById("name").innerHTML = " " + name.name;
-            document.getElementById("info").innerHTML = " " + name.id;
-        }
-        async function findAllDevices() { const allDevices = await navigator.bluetooth.requestDevice({ acceptAllDevices: true }) 
-        };
+        function displaySymName(name){ document.getElementById("name").innerHTML = " " + name.name;document.getElementById("info").innerHTML = " " + name.id; }
+        async function findAllDevices(){ const allDevices = await navigator.bluetooth.requestDevice({ acceptAllDevices: true }) }
     </script>    
 </body>
 </html>

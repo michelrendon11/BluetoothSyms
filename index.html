@@ -31,6 +31,11 @@
 
     <script>
         async function test(){
+            let str = "hh";
+            const hh = new TextEncoder();
+            const hhDecoder = new TextDecoder();
+            const array = new Int16Array(hh.encode(str));
+
             const symName = ' SYMU';
             const options = {
                 filters: [
@@ -39,13 +44,17 @@
                         {services: ['0000180a-0000-1000-8000-00805f9b34fb']},
                         {services: ['49535343-fe7d-4ae5-8fa9-9fafd205e455']}]};
             const device = await navigator.bluetooth.requestDevice(options);
+            console.log(device);
             const server = await device.gatt.connect();
             displaySymName(device);
             const service = await server.getPrimaryService('49535343-fe7d-4ae5-8fa9-9fafd205e455');
-            const characteristic = await service.getCharacteristic('49535343-6daa-4d02-abf6-19569aca69fe');
+            const characteristic = await service.getCharacteristic('49535343-026e-3a9b-954c-97daef17e26e');
             console.log(characteristic);
-            // const descriptor = await characteristic.writeValueWithResponse(new ArrayBuffer()['hh']);
-            // console.log(descriptor);
+            const descriptor = await characteristic.getDescriptor('00002902-0000-1000-8000-00805f9b34fb');
+            console.log(descriptor);
+            // descriptor.writeValue(array);
+            console.log(descriptor.readValue());
+
         }
         async function findAllSyms() {
             const hasBluetooth = navigator.bluetooth.getAvailability();
@@ -54,8 +63,8 @@
                 const allSyms = await navigator.bluetooth.requestDevice({ 
                     filters: [
                         {namePrefix: symName,},
-                        {services: ['00001800-0000-1000-8000-00805f9b34fb']},
-                        {services: ['0000180a-0000-1000-8000-00805f9b34fb']},
+                        // {services: ['00001800-0000-1000-8000-00805f9b34fb']},
+                        // {services: ['0000180a-0000-1000-8000-00805f9b34fb']},
                         {services: ['49535343-fe7d-4ae5-8fa9-9fafd205e455']}]})
                 .then(device=>{ displaySymName(device); return device.gatt.connect(); })
                 .then(value => { console.log(value); })

@@ -12,7 +12,8 @@
         #findSyms:active{ box-shadow: 10px 10px 20px rgb(0, 0, 0); color: blue; }
         .front{ color: green;}
         #name, #info{ color: black;}
-        #resources{margin: auto; width: 90vw; word-wrap: break-word ;}
+        #resources{margin: auto; width: 90vw; word-wrap: break-word; color: blue;}
+        .res{color: red; font-weight: bold;}
     </style>
     <title>Tank Sentry</title>
 </head>
@@ -29,12 +30,13 @@
         <p id="displayInfo"></p>
     </div>
     <div id="resources">
-        <h5>Resources:</h5>
-        <p>chrome://bluetooth-internals/#devices</p>
-        <p>chrome-extension://efaidnbmnnnibpcajpcglclefindmkaj/https://www.bluetooth.com/wp-content/uploads/Files/Specification/HTML/Assigned_Numbers/out/en/Assigned_Numbers.pdf?v=1742134068537</p>
-        <p>chrome-extension://efaidnbmnnnibpcajpcglclefindmkaj/https://www.bluetooth.com/wp-content/uploads/Files/Specification/HTML/Assigned_Numbers/out/en/Assigned_Numbers.pdf?v=1742134068537</p>
-        <p>https://developer.chrome.com/docs/capabilities/bluetooth</p>
-        <p>https://googlechrome.github.io/samples/web-bluetooth/write-descriptor.html?service=49535343-fe7d-4ae5-8fa9-9fafd205e455&characteristic=49535343-6daa-4d02-abf6-19569aca69fe</p>
+        <h5 style="color: black;">Resources:</h5>
+        <p><span class="res">Google Bluetooth Internal Devices: </span> chrome://bluetooth-internals/#devices</p>
+        <p><span class="res">Assigned Numbers PDF: </span> chrome-extension://efaidnbmnnnibpcajpcglclefindmkaj/https://www.bluetooth.com/wp-content/uploads/Files/Specification/HTML/Assigned_Numbers/out/en/Assigned_Numbers.pdf?v=1742134068537</p>
+        <p><span class="res">Chrome Developer Exaple Code: </span> https://developer.chrome.com/docs/capabilities/bluetooth</p>
+        <p><span class="res">Web Bluetooth / Write Descriptor Sample: </span> https://googlechrome.github.io/samples/web-bluetooth/write-descriptor.html?service=49535343-fe7d-4ae5-8fa9-9fafd205e455&characteristic=49535343-6daa-4d02-abf6-19569aca69fe</p>
+        <p><span class="res">WebBluetooth Registries: </span> https://github.com/WebBluetoothCG/registries </p>
+        <p><span class="res">Web Bluetooth API: </span>https://webbluetoothcg.github.io/web-bluetooth/#notification-events</p>
     </div>
 
     <script>

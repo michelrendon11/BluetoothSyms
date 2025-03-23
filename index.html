@@ -55,16 +55,20 @@
                         {services: ['0000180a-0000-1000-8000-00805f9b34fb']},
                         {services: ['49535343-fe7d-4ae5-8fa9-9fafd205e455']}]};
             const device = await navigator.bluetooth.requestDevice(options);
-            console.log(device);
+            // console.log(device);
             const server = await device.gatt.connect();
             displaySymName(device);
             const service = await server.getPrimaryService('49535343-fe7d-4ae5-8fa9-9fafd205e455');
             const characteristic = await service.getCharacteristic('49535343-026e-3a9b-954c-97daef17e26e');
             console.log(characteristic);
+            characteristic.writeValue(array);
+            console.log(characteristic);
             const descriptor = await characteristic.getDescriptor('00002902-0000-1000-8000-00805f9b34fb');
             console.log(descriptor);
             // descriptor.writeValue(array);
-            console.log(descriptor.readValue());
+            // console.log(descriptor.readValue());
+            // const resp = new Int16Array(characteristic.readValue());
+            // console.log(resp);
 
         }
         async function findAllSyms() {

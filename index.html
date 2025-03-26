@@ -7,10 +7,10 @@
         body{background-color: rgb(193, 204, 255);}
         #title{ font-family: "palatino"; background-color: rgba(10, 10, 228, 0.759); width: 100%; height: auto; padding: 0.1rem 0; text-align: center; border-radius: 10px; box-shadow: 0px 2px 5px rgb(0, 0, 0); }
         h1{ color: white; text-shadow: 3px 2px 2px rgb(5, 85, 19);}
-        button{ padding: 10px; font-size: 20px; border-radius: 10px; font-weight: bold; margin: auto; margin-top: 5px; background-image: linear-gradient(rgba(113, 142, 238, 0.71), rgb(240, 240, 240)); width: 12rem; }
-        #findEverything:hover, #findSyms:hover, #test:hover{ box-shadow: 5px 5px 20px rgb(0, 0, 0); color: green; }
-        #findEverything:active{ box-shadow: 10px 10px 20px rgb(0, 0, 0); color: green; }
-        #findSyms:active{ box-shadow: 10px 10px 20px rgb(0, 0, 0); color: blue; }
+        .butt{ padding: 10px; font-size: 20px; border-radius: 10px; font-weight: bold; margin: auto; margin-top: 5px; background-image: linear-gradient(rgba(113, 142, 238, 0.71), rgb(240, 240, 240)); width: 12rem; }
+        .ena:hover{ box-shadow: 5px 5px 20px rgb(0, 0, 0); color: green; }
+        .ena:active{ box-shadow: 10px 10px 20px rgb(0, 0, 0); color: blue; }
+        .dis{ visibility: hidden;}
         .front{ color: green;}
         #name, #info{ color: black;}
         #resources{margin: auto; width: 90vw; word-wrap: break-word; color: blue;}
@@ -21,13 +21,14 @@
 <body>
     <div id="title"> <h1>TANK SENTRY</h1> </div>
     <div id="findButtons">
-        <button id="findEverything" onclick="findAllDevices()">Find Everyting</button>
-        <button id="findSyms" onclick="findAllSyms()">Find SYMs</button>
-        <button id="test" onclick="test()">Test</button>
+        <button class="butt ena" id="findEverything" onclick="findAllDevices()">Find Everyting</button>
+        <!-- <button class="butt ena" id="findSyms" onclick="findAllSyms()">Find SYMs</button> -->
+        <button class="butt ena" id="test" onclick="test()">Test</button>
+        <button class="butt ena dis" id="disc" onclick="disc()">Disconnect</button>
     </div>
     <div>
-        <p class="front">Name:<span id="name"></span></p>
-        <p class="front">ID:<span id="info"></span></p>
+        <p class="front"><span id="name"></span></p>
+        <p class="front"><span id="info"></span></p>
         <p id="displayInfo"></p>
     </div>
     <div id="resources">
@@ -41,6 +42,8 @@
     </div>
 
     <script>
+        let server = null;
+        let device = null;
         async function test(){
             let str = "hh";
             const hh = new TextEncoder();
@@ -54,10 +57,14 @@
                         {services: ['00001800-0000-1000-8000-00805f9b34fb']},
                         {services: ['0000180a-0000-1000-8000-00805f9b34fb']},
                         {services: ['49535343-fe7d-4ae5-8fa9-9fafd205e455']}]};
-            const device = await navigator.bluetooth.requestDevice(options);
+            device = await navigator.bluetooth.requestDevice(options);
             // console.log(device);
-            const server = await device.gatt.connect();
+            server = await device.gatt.connect();
             displaySymName(device);
+            if(server.connected){
+                document.getElementById("disc").style.visibility = "visible";
+                console.log("Is Connected");
+            }
             const service = await server.getPrimaryService('49535343-fe7d-4ae5-8fa9-9fafd205e455');
             const characteristic = await service.getCharacteristic('49535343-026e-3a9b-954c-97daef17e26e');
             console.log(characteristic);
@@ -66,10 +73,10 @@
             const descriptor = await characteristic.getDescriptor('00002902-0000-1000-8000-00805f9b34fb');
             console.log(descriptor);
             // descriptor.writeValue(array);
-            // console.log(descriptor.readValue());
+            console.log(descriptor.readValue());
             // const resp = new Int16Array(characteristic.readValue());
             // console.log(resp);
-
+            
         }
         async function findAllSyms() {
             const hasBluetooth = navigator.bluetooth.getAvailability();
@@ -86,8 +93,17 @@
                 .catch(error => { console.error(error); });
             }
         } 
-        function displaySymName(name){ document.getElementById("name").innerHTML = " " + name.name;document.getElementById("info").innerHTML = " " + name.id; }
+        function displaySymName(name){ document.getElementById("name").innerHTML = "Name: " + name.name;document.getElementById("info").innerHTML = "ID: " + name.id; }
         async function findAllDevices(){ const allDevices = await navigator.bluetooth.requestDevice({ acceptAllDevices: true }) }
+
+        function disc() {
+            document.getElementById("disc").style.visibility = "hidden";
+            device.gatt.disconnect();
+            document.getElementById("name").innerHTML = "";
+            document.getElementById("info").innerHTML = "";
+            console.log(server);     
+        }
+        
     </script>    
 </body>
 </html>

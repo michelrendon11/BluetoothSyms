@@ -4,14 +4,15 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <style>
-        body{background-color: rgb(255, 234, 216);}
+        body{background-color: rgb(133, 251, 255);}
         #title{ font-family: "palatino"; background-color: rgba(10, 10, 228, 0.759); width: 100%; height: auto; padding: 0.1rem 0; text-align: center; border-radius: 10px; box-shadow: 0px 2px 5px rgb(0, 0, 0); }
+        .findButtons{text-align: center;}
         h1{ color: white; text-shadow: 3px 2px 2px rgb(5, 85, 19);}
         .butt{ padding: 10px; font-size: 20px; border-radius: 10px; font-weight: bold; margin: auto; margin-top: 5px; background-image: linear-gradient(rgba(113, 142, 238, 0.71), rgb(240, 240, 240)); width: 12rem; }
         .ena:hover{ box-shadow: 5px 5px 20px rgb(0, 0, 0); color: green; }
         .ena:active{ box-shadow: 10px 10px 20px rgb(0, 0, 0); color: blue; }
         .dis{ visibility: hidden;}
-        .front{ color: green;}
+        .front{ color: green; font-weight: bold;}
         #name, #info{ color: black;}
         #resources{margin: auto; width: 90vw; word-wrap: break-word; color: blue;}
         .res{color: red; font-weight: bold;}
@@ -20,16 +21,18 @@
 </head>
 <body>
     <div id="title"> <h1>TANK SENTRY</h1> </div>
-    <div id="findButtons">
+    <div class="findButtons">
         <button class="butt ena" id="findEverything" onclick="findAllDevices()">Find Everyting</button>
         <!-- <button class="butt ena" id="findSyms" onclick="findAllSyms()">Find SYMs</button> -->
         <button class="butt ena" id="test" onclick="test()">Test</button>
-        <button class="butt ena dis" id="disc" onclick="disc()">Disconnect</button>
     </div>
-    <div>
+    <div class="findButtons">
         <p class="front"><span id="name"></span></p>
         <p class="front"><span id="info"></span></p>
         <p id="displayInfo"></p>
+    </div>
+    <div class="findButtons">
+        <button class="butt ena dis" id="disc" onclick="disc()">Disconnect</button>
     </div>
     <div id="resources">
         <h3 style="color: black;">Resources:</h3>
@@ -93,7 +96,9 @@
                 .catch(error => { console.error(error); });
             }
         } 
-        function displaySymName(name){ document.getElementById("name").innerHTML = "Name: " + name.name;document.getElementById("info").innerHTML = "ID: " + name.id; }
+        function displaySymName(name){ 
+            document.getElementById("name").innerHTML = "Name: " + name.name;document.getElementById("info").innerHTML = "ID: " + name.id; 
+        }
         async function findAllDevices(){ const allDevices = await navigator.bluetooth.requestDevice({ acceptAllDevices: true }) }
 
         function disc() {

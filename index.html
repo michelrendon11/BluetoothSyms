@@ -30,6 +30,7 @@
         <p class="front"><span id="name"></span></p>
         <p class="front"><span id="info"></span></p>
         <p id="displayInfo"></p>
+        <p id="deviceInfo"></p>
     </div>
     <div class="findButtons">
         <button class="butt ena dis" id="disc" onclick="disc()">Disconnect</button>
@@ -45,6 +46,18 @@
     </div>
 
     <script>
+        window.onload = function(){
+            console.log(navigator.platform);
+            console.log(window.navigator.userAgent);
+            console.log(navigator.userAgentData.brands);
+            const br = navigator.userAgentData.brands;
+            console.log(br[0].brand);
+            console.log(br[0].version);
+            let text = "";
+            text += "Platform: " + navigator.platform + "<br/>";
+            text += "Browser: " + br[0].brand + " Version: " + br[0].version + "<br/>";
+            document.getElementById("deviceInfo").innerHTML = text;
+        }
         let server = null;
         let device = null;
         async function test(){

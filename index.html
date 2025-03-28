@@ -16,6 +16,7 @@
         #name, #info{ color: black;}
         #resources{margin: auto; width: 90vw; word-wrap: break-word; color: blue;}
         .res{color: red; font-weight: bold;}
+        #displayErrors{color: red;}
     </style>
     <title>Tank Sentry</title>
 </head>
@@ -23,11 +24,12 @@
     <div id="title"> <h1>TANK SENTRY</h1> </div>
     <div class="findButtons">
         <button class="butt ena" id="findEverything" onclick="findAllDevices()">Find Everyting</button>
-        <button class="butt ena" id="bluetooth" onclick="bluetooth()">SYM by Bluetooth</button>
-        <button class="butt ena" id="serial" onclick="serial()">SYM by Serial</button>
-        <button class="butt ena" id="combine" onclick="combine()">SYM Combine Serial & Bluetooth</button>
+        <!-- <button class="butt ena" id="bluetooth" onclick="bluetooth()">SYM by Bluetooth</button>
+        <button class="butt ena" id="serial" onclick="serial()">SYM by Serial</button> -->
+        <button class="butt ena" id="connectSym" onclick="connectSym()">Connect SYM</button>
     </div>
     <div class="findButtons">
+        <p id="displayErrors"></p>
         <p class="front"><span id="name"></span></p>
         <p class="front"><span id="info"></span></p>
         <p id="displayInfo"></p>
@@ -35,6 +37,7 @@
     </div>
     <div class="findButtons">
         <button class="butt ena dis" id="disc" onclick="disc()">Disconnect</button>
+        <button class="butt ena dis" id="disconnect" onclick="disconnect()">Disconnect</button>
     </div>
     <div id="resources">
         <h3 style="color: black;">Resources:</h3>
@@ -60,6 +63,62 @@
             text += "Platform: " + navigator.platform + "<br/>";
             text += "Browser: " + br[2].brand + " Version: " + br[2].version + "<br/>";
             document.getElementById("deviceInfo").innerHTML = text;
+        }
+
+        let port = null;
+        let reader = null;
+        let writer = null;
+
+        async function connectSym() {
+            try {
+                port = await navigator.serial.requestPort();
+                await port.open({ baudRate: 9600 });
+                const decoder = new TextDecoderStream();
+                port.readable.pipeTo(decoder.writable);
+                const inputStream = decoder.readable;
+                reader = inputStream.getReader();
+                writer = port.writable.getWriter();
+                await writer.write(sendMessages('hh'));
+                document.getElementById("disconnect").style.visibility = "visible";
+                readFromSym(reader);
+            } catch (error) {
+                console.log("From combine()");
+                document.getElementById("displayErrors").innerHTML = "" + error;
+            }
+        }
+
+        async function readFromSym(reader) {
+            let text = "";
+            try{
+                while (true) {
+                    const { value, done } = await reader.read();
+                    if (value) {
+                        console.log(value + '\n');
+                        text += value + "\n" + "<br/>";
+                    }
+                    if (done) {
+                        reader.releaseLock();
+                        break;
+                    }
+                    document.getElementById("displayInfo").innerHTML = text;
+                }
+            }catch (error) {
+                console.log("From readFromSym()");
+                document.getElementById("displayErrors").innerHTML = "" + error;
+            }
+        }
+
+        async function disconnect(){
+            document.getElementById("disconnect").style.visibility = "hidden";
+            await writer.write(sendMessages('<sr>'));
+            await writer.releaseLock();
+            // await port.close();
+        }
+
+        function sendMessages(string){
+            const encoder = new TextEncoder();
+            const encoded = encoder.encode(string);
+            return new Int8Array(encoded)
         }
 
         let server = null;
@@ -97,14 +156,14 @@
             server = await device.gatt.connect();
             displaySymName(device);
             if(server.connected){
-                document.getElementById("disc").style.visibility = "visible";
+                document.getElementById("disconnect").style.visibility = "visible";
                 console.log("Is Connected");
             }
             const service = await server.getPrimaryService('49535343-fe7d-4ae5-8fa9-9fafd205e455');
-            getService(service);
+            getBluetoothService(service);
         }
         
-        async function getService(service){
+        async function getBluetoothService(service){
             let str = "hh";
             const hh = new TextEncoder();
             const hhDecoder = new TextDecoder();
@@ -132,18 +191,16 @@
             console.log("Done");
         }
       
-        function displaySymName(name){ 
+        function displaySymName(name){
             document.getElementById("name").innerHTML = "Name: " + name.name;document.getElementById("info").innerHTML = "ID: " + name.id; 
         }
 
         async function findAllDevices(){
-            const allDevices = await navigator.bluetooth.requestDevice({
-                acceptAllDevices: true
-            })
-        }
-
-        async function combine() {
-            
+            try{
+                const allDevices = await navigator.bluetooth.requestDevice({acceptAllDevices: true});
+            }catch(error){
+                document.getElementById("displayErrors").innerHTML = "Operation Cancelled";
+            }
         }
 
         function disc() {

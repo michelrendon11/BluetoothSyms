@@ -8,7 +8,7 @@
         #title{ font-family: "palatino"; background-color: rgba(10, 10, 228, 0.759); width: 100%; height: auto; padding: 0.1rem 0; text-align: center; border-radius: 10px; box-shadow: 0px 2px 5px rgb(0, 0, 0); }
         .findButtons{text-align: center; margin-top: 10px;}
         h1{ color: white; text-shadow: 3px 2px 2px rgb(5, 85, 19);}
-        .butt{ padding: 10px; font-size: 20px; border-radius: 10px; font-weight: bold; margin: auto; margin-top: 5px; background-image: linear-gradient(rgba(113, 142, 238, 0.71), rgb(240, 240, 240)); width: 12rem; }
+        .butt{ padding: 10px; font-size: 20px; border-radius: 10px; font-weight: bold; margin: auto; margin-top: 5px; background-image: linear-gradient(rgba(113, 142, 238, 0.71), rgb(240, 240, 240)); width: 14rem; }
         .ena:hover{ box-shadow: 5px 5px 20px rgb(0, 0, 0); color: green; }
         .ena:active{ box-shadow: 10px 10px 20px rgb(0, 0, 0); color: blue; }
         .dis{ visibility: hidden;}
@@ -23,8 +23,9 @@
     <div id="title"> <h1>TANK SENTRY</h1> </div>
     <div class="findButtons">
         <button class="butt ena" id="findEverything" onclick="findAllDevices()">Find Everyting</button>
-        <!-- <button class="butt ena" id="findSyms" onclick="findAllSyms()">Find SYMs</button> -->
-        <button class="butt ena" id="test" onclick="test()">Test</button>
+        <button class="butt ena" id="bluetooth" onclick="bluetooth()">SYM by Bluetooth</button>
+        <button class="butt ena" id="serial" onclick="serial()">SYM by Serial</button>
+        <button class="butt ena" id="combine" onclick="combine()">SYM Combine Serial & Bluetooth</button>
     </div>
     <div class="findButtons">
         <p class="front"><span id="name"></span></p>
@@ -43,9 +44,11 @@
         <p><span class="res">Web Bluetooth / Write Descriptor Sample: </span> https://googlechrome.github.io/samples/web-bluetooth/write-descriptor.html?service=49535343-fe7d-4ae5-8fa9-9fafd205e455&characteristic=49535343-6daa-4d02-abf6-19569aca69fe</p>
         <p><span class="res">WebBluetooth Registries: </span> https://github.com/WebBluetoothCG/registries </p>
         <p><span class="res">Web Bluetooth API: </span>https://webbluetoothcg.github.io/web-bluetooth/#notification-events</p>
+        <p><span class="res">Web Serial App: </span> https://web-serial-app.netlify.app/</p>
     </div>
 
     <script>
+
         window.onload = function(){
             console.log(navigator.platform);
             console.log(window.navigator.userAgent);
@@ -62,25 +65,32 @@
         let server = null;
         let device = null;
 
-        async function forLater() {
-            const port = await navigator.serial.requestPort();
+        async function serial() {
+            const myBluetoothServiceUuid = [
+                '01234567-89ab-cdef-0123-456789abcdef',
+                '00001800-0000-1000-8000-00805f9b34fb',
+                '0000180a-0000-1000-8000-00805f9b34fb',
+                '01234567-89ab-cdef-0123-456789abcdef',
+                '49535343-fe7d-4ae5-8fa9-9fafd205e455'
+            ];
+            const port = await navigator.serial.requestPort({
+                // allowedBluetoothServiceClassIds: [myBluetoothServiceUuid],
+            });
             const textEncoder = new TextEncoderStream();
             const writableStreamClosed = textEncoder.readable.pipeTo(port.writable);
             const writer = textEncoder.writable.getWriter();
             await writer.write("hh");
             await port.close();
-        
-    
-             
         }
 
-        async function test(){
+        async function bluetooth(){
             const symName = ' SYMU';
             const options = {
                 filters: [
                         {namePrefix: symName,},
                         {services: ['00001800-0000-1000-8000-00805f9b34fb']},
                         {services: ['0000180a-0000-1000-8000-00805f9b34fb']},
+                        {services: ['01234567-89ab-cdef-0123-456789abcdef']},
                         {services: ['49535343-fe7d-4ae5-8fa9-9fafd205e455']}]};
             device = await navigator.bluetooth.requestDevice(options);
             // console.log(device);
@@ -91,9 +101,10 @@
                 console.log("Is Connected");
             }
             const service = await server.getPrimaryService('49535343-fe7d-4ae5-8fa9-9fafd205e455');
-            toPlay(service);
+            getService(service);
         }
-        async function toPlay(service){
+        
+        async function getService(service){
             let str = "hh";
             const hh = new TextEncoder();
             const hhDecoder = new TextDecoder();
@@ -105,9 +116,7 @@
             // characteristic.writeValue(array);
             // console.log("Chraracteristic after")
             // console.log(characteristic);
-
             const characteristic2 = await service.getCharacteristic('49535343-1e4d-4bd9-ba61-23c647249616');
-            
             await characteristic2.writeValue(new Int8Array(new TextEncoder('hh', 'utf-8')));
             // console.log(characteristic2);
             console.log(characteristic2.value);
@@ -117,25 +126,25 @@
             // console.log(descriptor);
             console.log(descriptor.value);
             console.log(descriptor.readValue());
-            
-            console.log("Done");
-            
             // const reading = await descriptor.readValue();
             // console.log("Reading")
             // console.log(reading);
-         
-            // reading.array.forEach(element => {
-            //     console.log(element);
-            // });
-           
-
-            // const descriptor = await characteristic2.getDescriptor('00002902-0000-1000-8000-00805f9b34fb');
+            console.log("Done");
         }
       
         function displaySymName(name){ 
             document.getElementById("name").innerHTML = "Name: " + name.name;document.getElementById("info").innerHTML = "ID: " + name.id; 
         }
-        async function findAllDevices(){ const allDevices = await navigator.bluetooth.requestDevice({ acceptAllDevices: true }) }
+
+        async function findAllDevices(){
+            const allDevices = await navigator.bluetooth.requestDevice({
+                acceptAllDevices: true
+            })
+        }
+
+        async function combine() {
+            
+        }
 
         function disc() {
             document.getElementById("disc").style.visibility = "hidden";
@@ -143,24 +152,13 @@
             document.getElementById("name").innerHTML = "";
             document.getElementById("info").innerHTML = "";
             console.log(server); 
-            
-              // async function findAllSyms() {
-        //     const hasBluetooth = navigator.bluetooth.getAvailability();
-        //     const symName = ' SYMU';
-        //     if(hasBluetooth){
-        //         const allSyms = await navigator.bluetooth.requestDevice({ 
-        //             filters: [
-        //                 {namePrefix: symName,},
-        //                 // {services: ['00001800-0000-1000-8000-00805f9b34fb']},
-        //                 // {services: ['0000180a-0000-1000-8000-00805f9b34fb']},
-        //                 {services: ['49535343-fe7d-4ae5-8fa9-9fafd205e455']}]})
-        //         .then(device=>{ displaySymName(device); return device.gatt.connect(); })
-        //         .then(value => { console.log(value); })
-        //         .catch(error => { console.error(error); });
-        //     }
-        // } 
         }
-        
+
+    //        // Unique UUID for this application
+    // let MY_UUID_SECURE = UUID.fromString("7A9C3B55-78D0-44A7-A94E-A93E3FE118CE");
+    // let MY_UUID_INSECURE = UUID.fromString("23F18142-B389-4772-93BD-52BDBB2C03E9");
+    // // Well known SPP UUID
+    // let UUID_SPP = UUID.fromString("00001101-0000-1000-8000-00805F9B34FB");
     </script>    
 </body>
 </html>

@@ -58,14 +58,23 @@
             text += "Browser: " + br[2].brand + " Version: " + br[2].version + "<br/>";
             document.getElementById("deviceInfo").innerHTML = text;
         }
+
         let server = null;
         let device = null;
-        async function test(){
-            let str = "hh";
-            const hh = new TextEncoder();
-            const hhDecoder = new TextDecoder();
-            const array = new Int16Array(hh.encode(str));
 
+        async function forLater() {
+            const port = await navigator.serial.requestPort();
+            const textEncoder = new TextEncoderStream();
+            const writableStreamClosed = textEncoder.readable.pipeTo(port.writable);
+            const writer = textEncoder.writable.getWriter();
+            await writer.write("hh");
+            await port.close();
+        
+    
+             
+        }
+
+        async function test(){
             const symName = ' SYMU';
             const options = {
                 filters: [
@@ -82,33 +91,47 @@
                 console.log("Is Connected");
             }
             const service = await server.getPrimaryService('49535343-fe7d-4ae5-8fa9-9fafd205e455');
-            const characteristic = await service.getCharacteristic('49535343-026e-3a9b-954c-97daef17e26e');
-            console.log(characteristic);
-            characteristic.writeValue(array);
-            console.log(characteristic);
-            const descriptor = await characteristic.getDescriptor('00002902-0000-1000-8000-00805f9b34fb');
-            console.log(descriptor);
-            // descriptor.writeValue(array);
-            console.log(descriptor.readValue());
-            // const resp = new Int16Array(characteristic.readValue());
-            // console.log(resp);
-            
+            toPlay(service);
         }
-        async function findAllSyms() {
-            const hasBluetooth = navigator.bluetooth.getAvailability();
-            const symName = ' SYMU';
-            if(hasBluetooth){
-                const allSyms = await navigator.bluetooth.requestDevice({ 
-                    filters: [
-                        {namePrefix: symName,},
-                        // {services: ['00001800-0000-1000-8000-00805f9b34fb']},
-                        // {services: ['0000180a-0000-1000-8000-00805f9b34fb']},
-                        {services: ['49535343-fe7d-4ae5-8fa9-9fafd205e455']}]})
-                .then(device=>{ displaySymName(device); return device.gatt.connect(); })
-                .then(value => { console.log(value); })
-                .catch(error => { console.error(error); });
-            }
-        } 
+        async function toPlay(service){
+            let str = "hh";
+            const hh = new TextEncoder();
+            const hhDecoder = new TextDecoder();
+            const array = new Int16Array(hh.encode(str));
+
+            // const characteristic = await service.getCharacteristic('49535343-026e-3a9b-954c-97daef17e26e');
+            // console.log("Characteristic before");
+            // console.log(characteristic);
+            // characteristic.writeValue(array);
+            // console.log("Chraracteristic after")
+            // console.log(characteristic);
+
+            const characteristic2 = await service.getCharacteristic('49535343-1e4d-4bd9-ba61-23c647249616');
+            
+            await characteristic2.writeValue(new Int8Array(new TextEncoder('hh', 'utf-8')));
+            // console.log(characteristic2);
+            console.log(characteristic2.value);
+            console.log(characteristic2.readValue());
+            const descriptor = await characteristic2.getDescriptor('00002902-0000-1000-8000-00805f9b34fb');
+            // await descriptor.writeValue(new Int8Array(new TextEncoder('hh', 'uft-8')));
+            // console.log(descriptor);
+            console.log(descriptor.value);
+            console.log(descriptor.readValue());
+            
+            console.log("Done");
+            
+            // const reading = await descriptor.readValue();
+            // console.log("Reading")
+            // console.log(reading);
+         
+            // reading.array.forEach(element => {
+            //     console.log(element);
+            // });
+           
+
+            // const descriptor = await characteristic2.getDescriptor('00002902-0000-1000-8000-00805f9b34fb');
+        }
+      
         function displaySymName(name){ 
             document.getElementById("name").innerHTML = "Name: " + name.name;document.getElementById("info").innerHTML = "ID: " + name.id; 
         }
@@ -119,7 +142,23 @@
             device.gatt.disconnect();
             document.getElementById("name").innerHTML = "";
             document.getElementById("info").innerHTML = "";
-            console.log(server);     
+            console.log(server); 
+            
+              // async function findAllSyms() {
+        //     const hasBluetooth = navigator.bluetooth.getAvailability();
+        //     const symName = ' SYMU';
+        //     if(hasBluetooth){
+        //         const allSyms = await navigator.bluetooth.requestDevice({ 
+        //             filters: [
+        //                 {namePrefix: symName,},
+        //                 // {services: ['00001800-0000-1000-8000-00805f9b34fb']},
+        //                 // {services: ['0000180a-0000-1000-8000-00805f9b34fb']},
+        //                 {services: ['49535343-fe7d-4ae5-8fa9-9fafd205e455']}]})
+        //         .then(device=>{ displaySymName(device); return device.gatt.connect(); })
+        //         .then(value => { console.log(value); })
+        //         .catch(error => { console.error(error); });
+        //     }
+        // } 
         }
         
     </script>    

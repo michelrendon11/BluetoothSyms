@@ -57,17 +57,19 @@
     </div> -->
 
     <script>
+
         window.onload = function(){
             refreshPage();
             console.log(navigator.platform);
             console.log(window.navigator.userAgent);
             console.log(navigator.userAgentData.brands);
             const br = navigator.userAgentData.brands;
-            console.log(br[2].brand);
-            console.log(br[2].version);
             let platformInfo = "";
-            platformInfo += "Platform: " + navigator.platform + "<br/>";
-            platformInfo += "Browser: " + br[2].brand + " Version: " + br[2].version + "<br/>";
+            for(let i = 0; i < br.length; i++){
+                if((br[i].brand).includes("Not")){ continue; }
+                console.log(br[i].brand + ": " + br[i].version);
+                platformInfo += br[i].brand + ": " + br[i].version + "<br/>"
+            }
             document.getElementById("deviceInfo").innerHTML = platformInfo;
 
             function refreshPage(){
@@ -85,9 +87,11 @@
                 document.getElementById("displayErrors").innerHTML = "";
             }
         }
+
     </script>
 
     <script>
+
         navigator.serial.addEventListener("connect", (e) => {
             showButtons();
         });
@@ -246,8 +250,8 @@
 
     </script>
 
-
     <script>
+
         let server = null;
         let device = null;
         async function symByBluetooth(){
@@ -350,6 +354,7 @@
     </script>
 
     <script>
+
         async function symBySerial() {
             let port = null;
             document.getElementById("disconnectSymBySerial").style.display = "initial";
@@ -413,10 +418,12 @@
     
     <script>
 
-    async function seeAllDevices(){
+        async function seeAllDevices(){
             try{ const allDevices = await navigator.bluetooth.requestDevice({acceptAllDevices: true});
             }catch(error){ document.getElementById("displayErrors").innerHTML = "Operation Cancelled"; }
         }
+
     </script>
+    
 </body>
 </html>

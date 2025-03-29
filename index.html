@@ -33,13 +33,19 @@
         <p class="front"><span id="name"></span></p>
         <p class="front"><span id="info"></span></p>
         <p id="displayInfo"></p>
-        <p id="deviceInfo"></p>
     </div>
     <div class="findButtons">
+        <button class="butt ena dis" id="symInfo" onclick="symInfo()">Sym Info</button>
+        <button class="butt ena dis" id="symReadings" onclick="symReadings()">Sym Readings</button>
+        <button class="butt ena dis" id="symData" onclick="symData()">Sym Data</button>
+        <button class="butt ena dis" id="purgeSym" onclick="purgeSym()">Purge Sym</button>
         <button class="butt ena dis" id="disc" onclick="disc()">Disconnect</button>
         <button class="butt ena dis" id="disconnect" onclick="disconnect()">Disconnect</button>
     </div>
-    <div id="resources">
+    <div class="findButtons">
+        <p id="deviceInfo"></p>
+    </div>
+    <!-- <div id="resources">
         <h3 style="color: black;">Resources:</h3>
         <p><span class="res">Google Bluetooth Internal Devices: </span> chrome://bluetooth-internals/#devices</p>
         <p><span class="res">Assigned Numbers PDF: </span> chrome-extension://efaidnbmnnnibpcajpcglclefindmkaj/https://www.bluetooth.com/wp-content/uploads/Files/Specification/HTML/Assigned_Numbers/out/en/Assigned_Numbers.pdf?v=1742134068537</p>
@@ -48,7 +54,7 @@
         <p><span class="res">WebBluetooth Registries: </span> https://github.com/WebBluetoothCG/registries </p>
         <p><span class="res">Web Bluetooth API: </span>https://webbluetoothcg.github.io/web-bluetooth/#notification-events</p>
         <p><span class="res">Web Serial App: </span> https://web-serial-app.netlify.app/</p>
-    </div>
+    </div> -->
 
     <script>
 
@@ -63,32 +69,65 @@
             text += "Platform: " + navigator.platform + "<br/>";
             text += "Browser: " + br[2].brand + " Version: " + br[2].version + "<br/>";
             document.getElementById("deviceInfo").innerHTML = text;
+            navigator.serial.addEventListener("connect", (e) => {
+            // Connect to `e.target` or add it to a list of available ports.
+            });
+
+            navigator.serial.addEventListener("disconnect", (e) => {
+            // Remove `e.target` from the list of available ports.
+            
+            document.getElementById("disconnect").style.visibility = "hidden";
+                document.getElementById("symInfo").style.visibility = "hidden";
+                document.getElementById("symData").style.visibility = "hidden";
+                document.getElementById("purgeSym").style.visibility = "hidden";
+                document.getElementById("symReadings").style.visibility = "hidden";
+                document.getElementById("displayInfo").innerHTML = "";
+            });
         }
 
-        let port = null;
         let reader = null;
         let writer = null;
+        let text = "";
 
         async function connectSym() {
             try {
-                port = await navigator.serial.requestPort();
+                const port = await navigator.serial.requestPort();
                 await port.open({ baudRate: 9600 });
                 const decoder = new TextDecoderStream();
                 port.readable.pipeTo(decoder.writable);
                 const inputStream = decoder.readable;
                 reader = inputStream.getReader();
                 writer = port.writable.getWriter();
-                await writer.write(sendMessages('hh'));
-                document.getElementById("disconnect").style.visibility = "visible";
-                readFromSym(reader);
+                // showButtons();
+                writeToSym('hh');
+                readFromSym();
             } catch (error) {
-                console.log("From combine()");
+                console.log("Error From connectSym()");
+                document.getElementById("displayErrors").innerHTML = "" + error;
+            }
+            port.addEventListener("disconnect", (event) => {
+                // notify that the port has become unavailable
+            });
+        }
+
+        async function writeToSym(string) {
+            try{
+                await writer.write(sendMessages(string));
+            }catch(error){
+                console.log("Error From writeToSym()");
                 document.getElementById("displayErrors").innerHTML = "" + error;
             }
         }
 
-        async function readFromSym(reader) {
-            let text = "";
+        function showButtons(){
+            document.getElementById("symInfo").style.visibility = "visible";
+            document.getElementById("symReadings").style.visibility = "visible";
+            document.getElementById("purgeSym").style.visibility = "visible";
+            document.getElementById("symData").style.visibility = "visible";
+            document.getElementById("disconnect").style.visibility = "visible";
+        }
+
+        async function readFromSym() {
             try{
                 while (true) {
                     const { value, done } = await reader.read();
@@ -101,24 +140,87 @@
                         break;
                     }
                     document.getElementById("displayInfo").innerHTML = text;
+                    showButtons();
                 }
             }catch (error) {
-                console.log("From readFromSym()");
+                console.log("Error From readFromSym()");
                 document.getElementById("displayErrors").innerHTML = "" + error;
             }
         }
 
+        async function symData(){
+            text = "";
+            try{
+                await writeToSym('<si>');
+                await delay(2000);
+                await writeToSym('n');
+                await delay(2000);
+                await writeToSym('y');
+            }catch(error){
+                console.log("Error From disconnect()");
+            }
+        }
+
+        async function symInfo(){
+            text = "";
+            try{
+                await writer.write(sendMessages('<sc>'));
+                await delay(2000);
+                await writeToSym('y');
+            }catch(error){
+                console.log("Error From disconnect()");
+            }
+        }
+
+        async function symReadings(){
+            text = "";
+            try{
+                await writer.write(sendMessages('<sd>'));
+                await delay(2000);
+                await writeToSym('n');
+                await delay(2000);
+                await writeToSym('y');
+            }catch(error){
+                console.log("Error From disconnect()");
+                console.log(error);
+            }
+        }
+
+        async function purgeSym(){
+            text = "";
+            try{
+                await writer.write(sendMessages('<sp>'));
+                await delay(8000);
+                await writeToSym('y');
+            }catch(error){
+                console.log("Error From disconnect()");
+                console.log(error);
+            }
+        }
+
         async function disconnect(){
-            document.getElementById("disconnect").style.visibility = "hidden";
-            await writer.write(sendMessages('<sr>'));
-            await writer.releaseLock();
-            // await port.close();
+            // document.getElementById("disconnect").style.visibility = "hidden";
+            // document.getElementById("symInfo").style.visibility = "hidden";
+            // document.getElementById("symData").style.visibility = "hidden";
+            // document.getElementById("purgeSym").style.visibility = "hidden";
+            // document.getElementById("symReadings").style.visibility = "hidden";
+            try{
+                await writer.write(sendMessages('<sr>'));
+                // document.getElementById("displayInfo").innerHTML = "";
+            }catch(error){
+                console.log("Error From disconnect()")
+                console.log(error);
+            }
         }
 
         function sendMessages(string){
             const encoder = new TextEncoder();
             const encoded = encoder.encode(string);
             return new Int8Array(encoded)
+        }
+
+        async function delay(ms) {
+            return new Promise(resolve => setTimeout(resolve, ms));
         }
 
         let server = null;

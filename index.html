@@ -6,9 +6,9 @@
     <style>
         body{background-color: rgb(133, 251, 255);}
         #title{ font-family: "palatino"; background-color: rgba(10, 10, 228, 0.759); width: 100%; height: auto; padding: 0.1rem 0; text-align: center; border-radius: 10px; box-shadow: 0px 2px 5px rgb(0, 0, 0); }
-        .findButtons{text-align: center; margin-top: 10px;}
+        .findButtons{display:inline-flexbox; text-align: center; margin-top: 10px; }
         h1{ color: white; text-shadow: 3px 2px 2px rgb(5, 85, 19);}
-        .butt{ padding: 10px; font-size: 20px; border-radius: 10px; font-weight: bold; margin: auto; margin-top: 5px; background-image: linear-gradient(rgba(113, 142, 238, 0.71), rgb(240, 240, 240)); width: 14rem; }
+        .butt{ padding: 10px; font-size: 20px; border-radius: 10px; font-weight: bold; margin: auto; margin-top: 5px; background-image: linear-gradient(rgba(113, 142, 238, 0.71), rgb(240, 240, 240)); width: 14rem; margin: 3px;}
         .ena:hover{ box-shadow: 5px 5px 20px rgb(0, 0, 0); color: green; }
         .ena:active{ box-shadow: 10px 10px 20px rgb(0, 0, 0); color: blue; }
         .dis{ visibility: hidden;}
@@ -24,8 +24,8 @@
     <div id="title"> <h1>TANK SENTRY</h1> </div>
     <div class="findButtons">
         <button class="butt ena" id="findEverything" onclick="findAllDevices()">Find Everyting</button>
-        <!-- <button class="butt ena" id="bluetooth" onclick="bluetooth()">SYM by Bluetooth</button>
-        <button class="butt ena" id="serial" onclick="serial()">SYM by Serial</button> -->
+        <button class="butt ena" id="bluetooth" onclick="bluetooth()">SYM by Bluetooth</button>
+        <button class="butt ena" id="serial" onclick="serial()">SYM by Serial</button>
         <button class="butt ena" id="connectSym" onclick="connectSym()">Connect SYM</button>
     </div>
     <div class="findButtons">
@@ -72,11 +72,10 @@
             navigator.serial.addEventListener("connect", (e) => {
             // Connect to `e.target` or add it to a list of available ports.
             });
-
+            // showButtons();
             navigator.serial.addEventListener("disconnect", (e) => {
             // Remove `e.target` from the list of available ports.
-            
-            document.getElementById("disconnect").style.visibility = "hidden";
+                document.getElementById("disconnect").style.visibility = "hidden";
                 document.getElementById("symInfo").style.visibility = "hidden";
                 document.getElementById("symData").style.visibility = "hidden";
                 document.getElementById("purgeSym").style.visibility = "hidden";
@@ -88,10 +87,11 @@
         let reader = null;
         let writer = null;
         let text = "";
+        let port = null;
 
         async function connectSym() {
             try {
-                const port = await navigator.serial.requestPort();
+                port = await navigator.serial.requestPort();
                 await port.open({ baudRate: 9600 });
                 const decoder = new TextDecoderStream();
                 port.readable.pipeTo(decoder.writable);
@@ -133,7 +133,7 @@
                     const { value, done } = await reader.read();
                     if (value) {
                         console.log(value + '\n');
-                        text += value + "\n" + "<br/>";
+                        text += value + "<br/>";
                     }
                     if (done) {
                         reader.releaseLock();
@@ -199,14 +199,8 @@
         }
 
         async function disconnect(){
-            // document.getElementById("disconnect").style.visibility = "hidden";
-            // document.getElementById("symInfo").style.visibility = "hidden";
-            // document.getElementById("symData").style.visibility = "hidden";
-            // document.getElementById("purgeSym").style.visibility = "hidden";
-            // document.getElementById("symReadings").style.visibility = "hidden";
             try{
                 await writer.write(sendMessages('<sr>'));
-                // document.getElementById("displayInfo").innerHTML = "";
             }catch(error){
                 console.log("Error From disconnect()")
                 console.log(error);
@@ -223,6 +217,11 @@
             return new Promise(resolve => setTimeout(resolve, ms));
         }
 
+        
+    </script>
+
+
+    <script>
         let server = null;
         let device = null;
 
@@ -237,11 +236,12 @@
             const port = await navigator.serial.requestPort({
                 // allowedBluetoothServiceClassIds: [myBluetoothServiceUuid],
             });
-            const textEncoder = new TextEncoderStream();
-            const writableStreamClosed = textEncoder.readable.pipeTo(port.writable);
-            const writer = textEncoder.writable.getWriter();
-            await writer.write("hh");
-            await port.close();
+            console.log(port);
+            // const textEncoder = new TextEncoderStream();
+            // const writableStreamClosed = textEncoder.readable.pipeTo(port.writable);
+            // const writer = textEncoder.writable.getWriter();
+            // await writer.write("hh");
+            // await port.close();
         }
 
         async function bluetooth(){
@@ -318,6 +318,6 @@
     // let MY_UUID_INSECURE = UUID.fromString("23F18142-B389-4772-93BD-52BDBB2C03E9");
     // // Well known SPP UUID
     // let UUID_SPP = UUID.fromString("00001101-0000-1000-8000-00805F9B34FB");
-    </script>    
+    </script> 
 </body>
 </html>

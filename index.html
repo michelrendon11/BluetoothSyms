@@ -64,7 +64,7 @@
             console.log(window.navigator.userAgent);
             console.log(navigator.userAgentData.brands);
             const br = navigator.userAgentData.brands;
-            let platformInfo = "";
+            let platformInfo = navigator.platform + "<br/>";
             for(let i = 0; i < br.length; i++){
                 if((br[i].brand).includes("Not")){ continue; }
                 console.log(br[i].brand + ": " + br[i].version);
@@ -424,6 +424,6 @@
         }
 
     </script>
-    
+
 </body>
 </html>

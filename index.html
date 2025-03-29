@@ -8,10 +8,9 @@
         #title{ font-family: "palatino"; background-color: rgba(10, 10, 228, 0.759); width: 100%; height: auto; padding: 0.1rem 0; text-align: center; border-radius: 10px; box-shadow: 0px 2px 5px rgb(0, 0, 0); }
         .findButtons{display:inline-flexbox; text-align: center; margin-top: 10px; }
         h1{ color: white; text-shadow: 3px 2px 2px rgb(5, 85, 19);}
-        .butt{ padding: 10px; font-size: 20px; border-radius: 10px; font-weight: bold; margin: auto; margin-top: 5px; background-image: linear-gradient(rgba(113, 142, 238, 0.71), rgb(240, 240, 240)); width: 14rem; margin: 3px;}
+        .butt{ padding: 10px; font-size: 20px; border-radius: 10px; font-weight: bold; margin: auto; margin-top: 5px; background-image: linear-gradient(rgba(113, 142, 238, 0.71), rgb(240, 240, 240)); width: 14rem; margin: 3px; display: inline-block;}
         .ena:hover{ box-shadow: 5px 5px 20px rgb(0, 0, 0); color: green; }
         .ena:active{ box-shadow: 10px 10px 20px rgb(0, 0, 0); color: blue; }
-        .dis{ visibility: hidden;}
         .front{ color: green; font-weight: bold;}
         #name, #info{ color: black;}
         #resources{margin: auto; width: 90vw; word-wrap: break-word; color: blue;}
@@ -23,9 +22,9 @@
 <body>
     <div id="title"> <h1>TANK SENTRY</h1> </div>
     <div class="findButtons">
-        <button class="butt ena" id="findEverything" onclick="findAllDevices()">Find Everyting</button>
-        <button class="butt ena" id="bluetooth" onclick="bluetooth()">SYM by Bluetooth</button>
-        <button class="butt ena" id="serial" onclick="serial()">SYM by Serial</button>
+        <button class="butt ena" id="seeAllDevices" onclick="seeAllDevices()">See Everyting</button>
+        <button class="butt ena" id="symByBluetooth" onclick="symByBluetooth()">SYM by Bluetooth</button>
+        <button class="butt ena" id="symBySerial" onclick="symBySerial()">SYM by Serial</button>
         <button class="butt ena" id="connectSym" onclick="connectSym()">Connect SYM</button>
     </div>
     <div class="findButtons">
@@ -35,12 +34,13 @@
         <p id="displayInfo"></p>
     </div>
     <div class="findButtons">
-        <button class="butt ena dis" id="symInfo" onclick="symInfo()">Sym Info</button>
-        <button class="butt ena dis" id="symReadings" onclick="symReadings()">Sym Readings</button>
-        <button class="butt ena dis" id="symData" onclick="symData()">Sym Data</button>
-        <button class="butt ena dis" id="purgeSym" onclick="purgeSym()">Purge Sym</button>
-        <button class="butt ena dis" id="disc" onclick="disc()">Disconnect</button>
-        <button class="butt ena dis" id="disconnect" onclick="disconnect()">Disconnect</button>
+        <button class="butt ena" id="symInfo" onclick="symInfo()">Sym Info</button>
+        <button class="butt ena" id="symReadings" onclick="symReadings()">Sym Readings</button>
+        <button class="butt ena" id="symData" onclick="symData()">Sym Data</button>
+        <button class="butt ena" id="purgeSym" onclick="purgeSym()">Purge Sym</button>
+        <button class="butt ena" id="disconnectSymByBluetooth" onclick="disconnectSymByBluetooth()">Disconnect</button>
+        <button class="butt ena" id="disconnect" onclick="disconnect()">Disconnect</button>
+        <button class="butt ena" id="disconnectSymBySerial" onclick="disconnectSymBySerial()">Disconnect</button>
     </div>
     <div class="findButtons">
         <p id="deviceInfo"></p>
@@ -57,32 +57,44 @@
     </div> -->
 
     <script>
-
         window.onload = function(){
+            refreshPage();
             console.log(navigator.platform);
             console.log(window.navigator.userAgent);
             console.log(navigator.userAgentData.brands);
             const br = navigator.userAgentData.brands;
             console.log(br[2].brand);
             console.log(br[2].version);
-            let text = "";
-            text += "Platform: " + navigator.platform + "<br/>";
-            text += "Browser: " + br[2].brand + " Version: " + br[2].version + "<br/>";
-            document.getElementById("deviceInfo").innerHTML = text;
-            navigator.serial.addEventListener("connect", (e) => {
-            // Connect to `e.target` or add it to a list of available ports.
-            });
-            // showButtons();
-            navigator.serial.addEventListener("disconnect", (e) => {
-            // Remove `e.target` from the list of available ports.
-                document.getElementById("disconnect").style.visibility = "hidden";
-                document.getElementById("symInfo").style.visibility = "hidden";
-                document.getElementById("symData").style.visibility = "hidden";
-                document.getElementById("purgeSym").style.visibility = "hidden";
-                document.getElementById("symReadings").style.visibility = "hidden";
-                document.getElementById("displayInfo").innerHTML = "";
-            });
+            let platformInfo = "";
+            platformInfo += "Platform: " + navigator.platform + "<br/>";
+            platformInfo += "Browser: " + br[2].brand + " Version: " + br[2].version + "<br/>";
+            document.getElementById("deviceInfo").innerHTML = platformInfo;
+
+            function refreshPage(){
+                document.getElementById("seeAllDevices").style.display = "initial";
+                document.getElementById("symByBluetooth").style.display = "initial";
+                document.getElementById("symBySerial").style.display = "initial";
+                document.getElementById("connectSym").style.display = "initial";
+                document.getElementById("symInfo").style.display = "none";
+                document.getElementById("symReadings").style.display = "none";
+                document.getElementById("purgeSym").style.display = "none";
+                document.getElementById("symData").style.display = "none";
+                document.getElementById("disconnect").style.display = "none";
+                document.getElementById("disconnectSymByBluetooth").style.display = "none";
+                document.getElementById("disconnectSymBySerial").style.display = "none";
+                document.getElementById("displayErrors").innerHTML = "";
+            }
         }
+    </script>
+
+    <script>
+        navigator.serial.addEventListener("connect", (e) => {
+            showButtons();
+        });
+        // showButtons();
+        navigator.serial.addEventListener("disconnect", (e) => {
+            hideButtons();
+        });
 
         let reader = null;
         let writer = null;
@@ -105,9 +117,6 @@
                 console.log("Error From connectSym()");
                 document.getElementById("displayErrors").innerHTML = "" + error;
             }
-            port.addEventListener("disconnect", (event) => {
-                // notify that the port has become unavailable
-            });
         }
 
         async function writeToSym(string) {
@@ -120,11 +129,29 @@
         }
 
         function showButtons(){
-            document.getElementById("symInfo").style.visibility = "visible";
-            document.getElementById("symReadings").style.visibility = "visible";
-            document.getElementById("purgeSym").style.visibility = "visible";
-            document.getElementById("symData").style.visibility = "visible";
-            document.getElementById("disconnect").style.visibility = "visible";
+            document.getElementById("symInfo").style.display = "initial";
+            document.getElementById("symReadings").style.display = "initial";
+            document.getElementById("purgeSym").style.display = "initial";
+            document.getElementById("symData").style.display = "initial";
+            document.getElementById("disconnect").style.display = "initial";
+            document.getElementById("seeAllDevices").style.display = "none";
+            document.getElementById("symByBluetooth").style.display = "none";
+            document.getElementById("symBySerial").style.display = "none";
+            document.getElementById("connectSym").style.display = "none";
+            document.getElementById("displayErrors").innerHTML = "";
+        }
+
+        function hideButtons(){
+            document.getElementById("symInfo").style.display = "none";
+            document.getElementById("symReadings").style.display = "none";
+            document.getElementById("purgeSym").style.display = "none";
+            document.getElementById("symData").style.display = "none";
+            document.getElementById("disconnect").style.display = "none";
+            document.getElementById("seeAllDevices").style.display = "initial";
+            document.getElementById("symByBluetooth").style.display = "initial";
+            document.getElementById("symBySerial").style.display = "initial";
+            document.getElementById("connectSym").style.display = "initial";
+            document.getElementById("displayErrors").innerHTML = "";
         }
 
         async function readFromSym() {
@@ -217,34 +244,14 @@
             return new Promise(resolve => setTimeout(resolve, ms));
         }
 
-        
     </script>
 
 
     <script>
         let server = null;
         let device = null;
-
-        async function serial() {
-            const myBluetoothServiceUuid = [
-                '01234567-89ab-cdef-0123-456789abcdef',
-                '00001800-0000-1000-8000-00805f9b34fb',
-                '0000180a-0000-1000-8000-00805f9b34fb',
-                '01234567-89ab-cdef-0123-456789abcdef',
-                '49535343-fe7d-4ae5-8fa9-9fafd205e455'
-            ];
-            const port = await navigator.serial.requestPort({
-                // allowedBluetoothServiceClassIds: [myBluetoothServiceUuid],
-            });
-            console.log(port);
-            // const textEncoder = new TextEncoderStream();
-            // const writableStreamClosed = textEncoder.readable.pipeTo(port.writable);
-            // const writer = textEncoder.writable.getWriter();
-            // await writer.write("hh");
-            // await port.close();
-        }
-
-        async function bluetooth(){
+        async function symByBluetooth(){
+            document.getElementById("displayErrors").innerHTML = "";
             const symName = ' SYMU';
             const options = {
                 filters: [
@@ -253,12 +260,18 @@
                         {services: ['0000180a-0000-1000-8000-00805f9b34fb']},
                         {services: ['01234567-89ab-cdef-0123-456789abcdef']},
                         {services: ['49535343-fe7d-4ae5-8fa9-9fafd205e455']}]};
-            device = await navigator.bluetooth.requestDevice(options);
-            // console.log(device);
+            try{
+                device = await navigator.bluetooth.requestDevice(options);
+                console.log(device);
+            }catch(error){
+                console.log(error);
+                document.getElementById("displayErrors").innerHTML = error;
+            }
             server = await device.gatt.connect();
             displaySymName(device);
+            hideButtonsByBluetooth();
+            document.getElementById("disconnectSymByBluetooth").style.display = "initial";
             if(server.connected){
-                document.getElementById("disconnect").style.visibility = "visible";
                 console.log("Is Connected");
             }
             const service = await server.getPrimaryService('49535343-fe7d-4ae5-8fa9-9fafd205e455');
@@ -270,7 +283,6 @@
             const hh = new TextEncoder();
             const hhDecoder = new TextDecoder();
             const array = new Int16Array(hh.encode(str));
-
             // const characteristic = await service.getCharacteristic('49535343-026e-3a9b-954c-97daef17e26e');
             // console.log("Characteristic before");
             // console.log(characteristic);
@@ -294,30 +306,117 @@
         }
       
         function displaySymName(name){
-            document.getElementById("name").innerHTML = "Name: " + name.name;document.getElementById("info").innerHTML = "ID: " + name.id; 
-        }
+            document.getElementById("name").innerHTML = "Name: " + name.name;
+            document.getElementById("info").innerHTML = "ID: " + name.id; 
+            document.getElementById("displayInfo").innerHTML = "Server Connected: " + name.gatt;
 
-        async function findAllDevices(){
-            try{
-                const allDevices = await navigator.bluetooth.requestDevice({acceptAllDevices: true});
-            }catch(error){
-                document.getElementById("displayErrors").innerHTML = "Operation Cancelled";
-            }
         }
-
-        function disc() {
-            document.getElementById("disc").style.visibility = "hidden";
+        
+        function disconnectSymByBluetooth() {
+            document.getElementById("disconnectSymByBluetooth").style.display = "none";
             device.gatt.disconnect();
             document.getElementById("name").innerHTML = "";
             document.getElementById("info").innerHTML = "";
+            document.getElementById("displayErrors").innerHTML = "";
+            document.getElementById("displayInfo").innerHTML = "";
+            showButtonsByBluetooth();
             console.log(server); 
         }
 
-    //        // Unique UUID for this application
-    // let MY_UUID_SECURE = UUID.fromString("7A9C3B55-78D0-44A7-A94E-A93E3FE118CE");
-    // let MY_UUID_INSECURE = UUID.fromString("23F18142-B389-4772-93BD-52BDBB2C03E9");
-    // // Well known SPP UUID
-    // let UUID_SPP = UUID.fromString("00001101-0000-1000-8000-00805F9B34FB");
-    </script> 
+        function hideButtonsByBluetooth(){
+            document.getElementById("seeAllDevices").style.display = "none";
+            document.getElementById("symByBluetooth").style.display = "none";
+            document.getElementById("symBySerial").style.display = "none";
+            document.getElementById("connectSym").style.display = "none";
+            document.getElementById("disconnectSymByBluetooth").style.display = "initial";
+            document.getElementById("displayErrors").innerHTML = "";
+        }
+
+        function showButtonsByBluetooth(){
+            document.getElementById("seeAllDevices").style.display = "initial";
+            document.getElementById("symByBluetooth").style.display = "initial";
+            document.getElementById("symBySerial").style.display = "initial";
+            document.getElementById("connectSym").style.display = "initial";
+            document.getElementById("disconnectSymByBluetooth").style.display = "none";
+            document.getElementById("displayErrors").innerHTML = "";
+        }
+
+            //        // Unique UUID for this application
+            // let MY_UUID_SECURE = UUID.fromString("7A9C3B55-78D0-44A7-A94E-A93E3FE118CE");
+            // let MY_UUID_INSECURE = UUID.fromString("23F18142-B389-4772-93BD-52BDBB2C03E9");
+            // // Well known SPP UUID
+            // let UUID_SPP = UUID.fromString("00001101-0000-1000-8000-00805F9B34FB");
+
+    </script>
+
+    <script>
+        async function symBySerial() {
+            let port = null;
+            document.getElementById("disconnectSymBySerial").style.display = "initial";
+            document.getElementById("displayErrors").innerHTML = "";
+            const myBluetoothServiceUuid = [
+                '01234567-89ab-cdef-0123-456789abcdef',
+                '00001800-0000-1000-8000-00805f9b34fb',
+                '0000180a-0000-1000-8000-00805f9b34fb',
+                '01234567-89ab-cdef-0123-456789abcdef',
+                '49535343-fe7d-4ae5-8fa9-9fafd205e455'
+            ];
+            try{
+                port = await navigator.serial.requestPort({
+                // allowedBluetoothServiceClassIds: [myBluetoothServiceUuid],
+            });
+            hideButtonsBySerial();
+            document.getElementById("displayInfo").innerHTML = "Port Connected: " + port.connected;
+            }catch(error){
+                console.log(error);
+                document.getElementById("displayErrors").innerHTML = error;
+                document.getElementById("disconnectSymBySerial").style.display = "none";
+            }
+            console.log(port);
+            // const textEncoder = new TextEncoderStream();
+            // const writableStreamClosed = textEncoder.readable.pipeTo(port.writable);
+            // const writer = textEncoder.writable.getWriter();
+            // await writer.write("hh");
+            // await port.close();
+        }
+
+        async function disconnectSymBySerial() {
+            document.getElementById("displayErrors").innerHTML = "";
+            document.getElementById("displayInfo").innerHTML = "";
+            showButtonsBySerial();
+            try{
+                port.close();
+            }catch(error){
+                console.log(error);
+                document.getElementById("displayErrors").innerHTML = error;
+            }
+        }
+        
+        function hideButtonsBySerial(){
+            document.getElementById("seeAllDevices").style.display = "none";
+            document.getElementById("symByBluetooth").style.display = "none";
+            document.getElementById("symBySerial").style.display = "none";
+            document.getElementById("connectSym").style.display = "none";
+            document.getElementById("disconnectSymBySerial").style.display = "initial";
+            document.getElementById("displayErrors").innerHTML = "";
+        }
+
+        function showButtonsBySerial(){
+            document.getElementById("seeAllDevices").style.display = "initial";
+            document.getElementById("symByBluetooth").style.display = "initial";
+            document.getElementById("symBySerial").style.display = "initial";
+            document.getElementById("connectSym").style.display = "initial";
+            document.getElementById("disconnectSymBySerial").style.display = "none";
+            document.getElementById("displayErrors").innerHTML = "";
+        }
+    </script>
+    
+    <script>
+
+    async function seeAllDevices(){
+            try{ const allDevices = await navigator.bluetooth.requestDevice({acceptAllDevices: true});
+            }catch(error){ document.getElementById("displayErrors").innerHTML = "Operation Cancelled"; }
+        }
+    </script>
 </body>
 </html>

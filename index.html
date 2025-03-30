@@ -7,11 +7,12 @@
         body{background-color: rgb(133, 251, 255);}
         #title{ font-family: "palatino"; background-color: rgba(10, 10, 228, 0.759); width: 100%; height: auto; padding: 0.1rem 0; text-align: center; border-radius: 10px; box-shadow: 0px 2px 5px rgb(0, 0, 0); }
         .findButtons{display:inline-flexbox; text-align: center; margin-top: 10px; }
-        h1{ color: white; text-shadow: 3px 2px 2px rgb(5, 85, 19);}
-        .butt, .butt2{ padding: 10px; font-size: 20px; border-radius: 10px; font-weight: bold; margin: auto; margin-top: 5px;  width: 14rem; margin: 3px; display: inline-block;}
-        .butt{ background-image: linear-gradient(rgba(113, 142, 238, 0.71), rgb(240, 240, 240)); }
-        .butt2{ background-image: linear-gradient(rgba(151, 247, 147, 0.71), rgb(240, 240, 240)); }
-        .ena:hover{ box-shadow: 5px 5px 20px rgb(0, 0, 0); color: green; }
+        h1{ color: white; text-shadow: 3px 2px 2px rgb(0, 0, 0);}
+        .butt, .butt2, .butt3{ padding: 10px; font-size: 20px; border-radius: 10px; font-weight: bold; margin-top: 5px;  width: 14rem; margin: 3px; display: inline-block; color: white; text-shadow: 2px 2px 2px rgb(0, 0, 0);}
+        .butt{ background-image: linear-gradient(hsla(234, 94%, 49%, 0.956), rgb(136, 186, 255)); }
+        .butt2{ background-image: linear-gradient(rgba(9, 104, 2, 0.71), rgb(97, 244, 102)); }
+        .butt3{ background-image: linear-gradient(rgba(177, 3, 3, 0.992), rgb(250, 177, 177)); }
+        .ena:hover{ box-shadow: 5px 5px 20px rgb(0, 0, 0); color: rgb(215, 252, 215); }
         .ena:active{ box-shadow: 10px 10px 20px rgb(0, 0, 0); color: blue; }
         .front{ color: green; font-weight: bold;}
         #name, #info{ color: black;}
@@ -34,15 +35,16 @@
         <p class="front"><span id="name"></span></p>
         <p class="front"><span id="info"></span></p>
         <p id="displayInfo"></p>
+        <p id="displaySymInfo"></p>
     </div>
     <div class="findButtons">
         <button class="butt2 ena" id="symInfo" onclick="symInfo()">Sym Info</button>
         <button class="butt2 ena" id="symReadings" onclick="symReadings()">Sym Readings</button>
         <button class="butt2 ena" id="symData" onclick="symData()">Sym Data</button>
         <button class="butt2 ena" id="purgeSym" onclick="purgeSym()">Purge Sym</button>
-        <button class="butt2 ena" id="disconnectSymByBluetooth" onclick="disconnectSymByBluetooth()">Disconnect</button>
-        <button class="butt2 ena" id="disconnect" onclick="disconnect()">Disconnect</button>
-        <button class="butt2 ena" id="disconnectSymBySerial" onclick="disconnectSymBySerial()">Disconnect</button>
+        <button class="butt3 ena" id="disconnectSymByBluetooth" onclick="disconnectSymByBluetooth()">Disconnect</button>
+        <button class="butt3 ena" id="disconnect" onclick="disconnect()">Disconnect</button>
+        <button class="butt3 ena" id="disconnectSymBySerial" onclick="disconnectSymBySerial()">Disconnect</button>
     </div>
     <div class="findButtons">
         <p id="deviceInfo"></p>
@@ -73,7 +75,7 @@
                 platformInfo += br[i].brand + ": " + br[i].version + "<br/>"
             }
             document.getElementById("deviceInfo").innerHTML = platformInfo;
-
+            // showButtons();
             function refreshPage(){
                 document.getElementById("seeAllDevices").style.display = "initial";
                 document.getElementById("symByBluetooth").style.display = "initial";
@@ -104,7 +106,6 @@
 
         let reader = null;
         let writer = null;
-        let text = "";
         let port = null;
 
         async function connectSym() {
@@ -118,7 +119,7 @@
                 writer = port.writable.getWriter();
                 // showButtons();
                 writeToSym('hh');
-                readFromSym();
+                readFromSym('hello');
             } catch (error) {
                 console.log("Error From connectSym()");
                 document.getElementById("displayErrors").innerHTML = "" + error;
@@ -134,46 +135,21 @@
             }
         }
 
-        function showButtons(){
-            document.getElementById("symInfo").style.display = "initial";
-            document.getElementById("symReadings").style.display = "initial";
-            document.getElementById("purgeSym").style.display = "initial";
-            document.getElementById("symData").style.display = "initial";
-            document.getElementById("disconnect").style.display = "initial";
-            document.getElementById("seeAllDevices").style.display = "none";
-            document.getElementById("symByBluetooth").style.display = "none";
-            document.getElementById("symBySerial").style.display = "none";
-            document.getElementById("connectSym").style.display = "none";
-            document.getElementById("displayErrors").innerHTML = "";
-        }
-
-        function hideButtons(){
-            document.getElementById("symInfo").style.display = "none";
-            document.getElementById("symReadings").style.display = "none";
-            document.getElementById("purgeSym").style.display = "none";
-            document.getElementById("symData").style.display = "none";
-            document.getElementById("disconnect").style.display = "none";
-            document.getElementById("seeAllDevices").style.display = "initial";
-            document.getElementById("symByBluetooth").style.display = "initial";
-            document.getElementById("symBySerial").style.display = "initial";
-            document.getElementById("connectSym").style.display = "initial";
-            document.getElementById("displayErrors").innerHTML = "";
-            document.getElementById("displayInfo").innerHTML = "";
-        }
-
-        async function readFromSym() {
+        let bluetoothArray = new Array();
+        let newText = "";
+        async function readFromSym(string) {
             try{
                 while (true) {
                     const { value, done } = await reader.read();
                     if (value) {
                         console.log(value + '\n');
-                        text += value + "<br/>";
+                        newText += value;
                     }
                     if (done) {
                         reader.releaseLock();
                         break;
                     }
-                    document.getElementById("displayInfo").innerHTML = text;
+                    document.getElementById("displayInfo").innerHTML = newText;
                     showButtons();
                 }
             }catch (error) {
@@ -183,7 +159,7 @@
         }
 
         async function symData(){
-            text = "";
+            readFromSym('symData');
             try{
                 await writeToSym('<si>');
                 await delay(2000);
@@ -196,7 +172,7 @@
         }
 
         async function symInfo(){
-            text = "";
+            readFromSym('symInfo');
             try{
                 await writer.write(sendMessages('<sc>'));
                 await delay(2000);
@@ -207,7 +183,7 @@
         }
 
         async function symReadings(){
-            text = "";
+            readFromSym('symReadings');
             try{
                 await writer.write(sendMessages('<sd>'));
                 await delay(2000);
@@ -221,7 +197,7 @@
         }
 
         async function purgeSym(){
-            text = "";
+            readFromSym('purgeSym');
             try{
                 await writer.write(sendMessages('<sp>'));
                 await delay(8000);
@@ -250,6 +226,33 @@
 
         async function delay(ms) {
             return new Promise(resolve => setTimeout(resolve, ms));
+        }
+
+        function showButtons(){
+            document.getElementById("symInfo").style.display = "initial";
+            document.getElementById("symReadings").style.display = "initial";
+            document.getElementById("purgeSym").style.display = "initial";
+            document.getElementById("symData").style.display = "initial";
+            document.getElementById("disconnect").style.display = "initial";
+            document.getElementById("seeAllDevices").style.display = "none";
+            document.getElementById("symByBluetooth").style.display = "none";
+            document.getElementById("symBySerial").style.display = "none";
+            document.getElementById("connectSym").style.display = "none";
+            document.getElementById("displayErrors").innerHTML = "";
+        }
+
+        function hideButtons(){
+            document.getElementById("symInfo").style.display = "none";
+            document.getElementById("symReadings").style.display = "none";
+            document.getElementById("purgeSym").style.display = "none";
+            document.getElementById("symData").style.display = "none";
+            document.getElementById("disconnect").style.display = "none";
+            document.getElementById("seeAllDevices").style.display = "initial";
+            document.getElementById("symByBluetooth").style.display = "initial";
+            document.getElementById("symBySerial").style.display = "initial";
+            document.getElementById("connectSym").style.display = "initial";
+            document.getElementById("displayErrors").innerHTML = "";
+            document.getElementById("displayInfo").innerHTML = "";
         }
 
     </script>

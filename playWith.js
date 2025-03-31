@@ -17,14 +17,22 @@ let s5 = "PUMP RUNS/n FOR 5 seconds DONE More inquires ? Send 'Y' or 'N' Please 
 // "Disconect"->
 let s6 = "DONE... REBOOTING... Do not remove Power from the SYM ";
 
-let symPrintOut = "";
-let sMatch = s1.match(/[0-9]{6}/g ).join("");
-console.log(sMatch);
+let serialMatch = s1.match(/[0-9]{6}/g );
+let dateMatch = s2.match(/\d{2}\/\d{2}\/\d{4}/g);
+let decimalMatch = s2.match(/\d{1}\.\d{2}/g);
+let currentSettingsMatch = s2.slice(0, ((s2.search(/[0-9]/))-2));
+let levelRageMatch = s2.match(/0 -\ [0-9]{2,3}/g);
+let currentLevel = s3.slice(0, (s3.search(/vdc/i)));
 
 
+let symPrintOut = "SYM U - Serial# " + serialMatch + "\n" +
+"Firmware Version: " + decimalMatch[2] + "\n" +
+"Production Date: " + dateMatch + "\n" +
+currentSettingsMatch + " " + levelRageMatch + "\n" +
+"Output Voltage Range: " + decimalMatch[0] + " - " + decimalMatch[1] + "\n" +
+"Current Level: " + "\n" +
+ currentLevel;
 
-symPrintOut = "SYM U - Serial# ";
-symPrintOut += sMatch;
 console.log(symPrintOut);
 
 

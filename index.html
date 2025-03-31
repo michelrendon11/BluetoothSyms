@@ -130,6 +130,7 @@
                 const inputStream = decoder.readable;
                 reader = inputStream.getReader();
                 writer = port.writable.getWriter();
+                showButtons();
                 writeToSym('hh');
                 readFromSym();
                 await delay(2000);
@@ -140,7 +141,6 @@
                 symReadings();
                 await delay(4000);
                 readSymReadings(symResponce);
-                showButtons();
             } catch (error) {
                 console.log("Error From connectSym()");
                 document.getElementById("displayErrors").innerHTML = "" + error;
@@ -171,6 +171,7 @@
             }catch (error) {
                 console.log("Error From readFromSym()");
                 document.getElementById("displayErrors").innerHTML = "" + error;
+                document.getElementById("purgeAndDisconnect").innerHTML = "";
             }
         }
 
@@ -247,7 +248,9 @@
             document.getElementById("purgeAndDisconnect").innerHTML = "Rebooting SYM...";
             try{
                 await writeToSym('<sr>');
+                hideButtons();
             }catch(error){
+                document.getElementById("purgeAndDisconnect").innerHTML = "";
                 console.log("Error From disconnect()")
                 console.log(error);
             }

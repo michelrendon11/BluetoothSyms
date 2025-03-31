@@ -19,6 +19,8 @@
         #resources{margin: auto; width: 90vw; word-wrap: break-word; color: blue;}
         .res{color: red; font-weight: bold;}
         #displayErrors{color: red;}
+        #purgeAndDisconnect{ color: red; font-weight: bold; }
+        .disable, .disable:hover, .disable:active{ background-image: linear-gradient(rgb(37, 37, 37), rgb(113, 113, 113)); color: rgb(209, 208, 208);}
     </style>
     <title>Tank Sentry</title>
 </head>
@@ -36,11 +38,12 @@
         <p class="front"><span id="info"></span></p>
         <p id="displayInfo"></p>
         <p id="displaySymInfo"></p>
+        <p id="purgeAndDisconnect"></p>
     </div>
     <div class="findButtons">
-        <button class="butt2 ena" id="symInfo" onclick="symInfo()">Sym Info</button>
+        <!-- <button class="butt2 ena" id="symInfo" onclick="symInfo()">Sym Info</button>
         <button class="butt2 ena" id="symReadings" onclick="symReadings()">Sym Readings</button>
-        <button class="butt2 ena" id="symData" onclick="symData()">Sym Data</button>
+        <button class="butt2 ena" id="symData" onclick="symData()">Sym Data</button> -->
         <button class="butt2 ena" id="purgeSym" onclick="purgeSym()">Purge Sym</button>
     </div>
     <div class="findButtons">
@@ -83,10 +86,10 @@
                 document.getElementById("symByBluetooth").style.display = "initial";
                 document.getElementById("symBySerial").style.display = "initial";
                 document.getElementById("connectSym").style.display = "initial";
-                document.getElementById("symInfo").style.display = "none";
-                document.getElementById("symReadings").style.display = "none";
+                // document.getElementById("symInfo").style.display = "none";
+                // document.getElementById("symReadings").style.display = "none";
                 document.getElementById("purgeSym").style.display = "none";
-                document.getElementById("symData").style.display = "none";
+                // document.getElementById("symData").style.display = "none";
                 document.getElementById("disconnect").style.display = "none";
                 document.getElementById("disconnectSymByBluetooth").style.display = "none";
                 document.getElementById("disconnectSymBySerial").style.display = "none";
@@ -98,17 +101,25 @@
 
     <script>
 
-        navigator.serial.addEventListener("connect", (e) => {
-            showButtons();
-        });
-        // showButtons();
-        navigator.serial.addEventListener("disconnect", (e) => {
-            hideButtons();
-        });
-
         let reader = null;
         let writer = null;
         let port = null;
+        let symResponce = "";
+        let serialMatch = "";
+        let dateMatch = "";
+        let decimalMatch = "";
+        let currentSettingsMatch = "";
+        let levelRageMatch = "";
+        let currentLevel = "";
+        let screenMessage = "";
+
+        navigator.serial.addEventListener("connect", (e) => {
+            showButtons();
+        });
+        navigator.serial.addEventListener("disconnect", (e) => {
+            hideButtons();
+            document.getElementById("purgeAndDisconnect").innerHTML = "";
+        });
 
         async function connectSym() {
             try {
@@ -119,9 +130,16 @@
                 const inputStream = decoder.readable;
                 reader = inputStream.getReader();
                 writer = port.writable.getWriter();
-                // showButtons();
                 writeToSym('hh');
-                readFromSym('hello');
+                readFromSym();
+                await delay(2000);
+                readHello(symResponce);
+                symInfo();
+                await delay(3000);
+                readSymInfo(symResponce);
+                symReadings();
+                await delay(4000);
+                readSymReadings(symResponce);
             } catch (error) {
                 console.log("Error From connectSym()");
                 document.getElementById("displayErrors").innerHTML = "" + error;
@@ -129,30 +147,25 @@
         }
 
         async function writeToSym(string) {
-            try{
-                await writer.write(sendMessages(string));
+            try{ await writer.write(sendMessages(string));
             }catch(error){
                 console.log("Error From writeToSym()");
                 document.getElementById("displayErrors").innerHTML = "" + error;
             }
         }
 
-        let bluetoothArray = new Array();
-        let newText = "";
-        async function readFromSym(string) {
+        async function readFromSym() {
             try{
                 while (true) {
                     const { value, done } = await reader.read();
                     if (value) {
-                        console.log(value + '\n');
-                        newText += value;
-                    }
+                         console.log(value + '\n');
+                         symResponce += value;
+                        }
                     if (done) {
                         reader.releaseLock();
                         break;
                     }
-                    document.getElementById("displayInfo").innerHTML = newText;
-                    showButtons();
                 }
             }catch (error) {
                 console.log("Error From readFromSym()");
@@ -160,64 +173,83 @@
             }
         }
 
-        async function symData(){
-            readFromSym('symData');
-            try{
-                await writeToSym('<si>');
-                await delay(2000);
-                await writeToSym('n');
-                await delay(2000);
-                await writeToSym('y');
-            }catch(error){
-                console.log("Error From disconnect()");
-            }
+        function readHello(s){
+            console.log("readHello()");
+            serialMatch = s.match(/[0-9]{6}/g );
+            screenMessage = "SYM U - Serial# " + serialMatch + "<br/>";
+            document.getElementById("displayInfo").innerHTML = screenMessage;
+            symResponce = "";
+        }
+
+        function readSymInfo(s){
+            console.log("readSymInfo()");
+            dateMatch = s.match(/\d{2}\/\d{2}\/\d{4}/g);
+            decimalMatch = s.match(/\d{1}\.\d{2}/g);
+            currentSettingsMatch = s.slice(0, ((s.search(/[0-9]/))-2));
+            levelRageMatch = s.match(/0 -\ [0-9]{2,3}/g);
+            screenMessage += "Firmware Version: " + decimalMatch[2] + "<br/>" +
+            "Production Date: " + dateMatch + "<br/>" +
+            currentSettingsMatch + " " + levelRageMatch + "<br/>" +
+            "Output Voltage Range: " + decimalMatch[0] + " - " + decimalMatch[1] + "<br/>";
+            document.getElementById("displayInfo").innerHTML = screenMessage;
+            symResponce = "";
+        }
+
+        function readSymReadings(s){
+            console.log("readSymReadings()");
+            currentLevel = s.slice(0, (s.search(/vdc/i)));
+            screenMessage += "Current Level: " + "<br/>" + currentLevel;
+            document.getElementById("displayInfo").innerHTML = screenMessage;
+            symResponce = "";
         }
 
         async function symInfo(){
-            readFromSym('symInfo');
+            console.log("symInfo()");
             try{
-                await writer.write(sendMessages('<sc>'));
+                await writeToSym('<sc>');
                 await delay(2000);
                 await writeToSym('y');
             }catch(error){
-                console.log("Error From disconnect()");
+                console.log("Error From symInfo()");
             }
         }
 
         async function symReadings(){
-            readFromSym('symReadings');
+            console.log("symReadings()");
             try{
-                await writer.write(sendMessages('<sd>'));
+                await writeToSym('<sd>');
                 await delay(2000);
                 await writeToSym('n');
                 await delay(2000);
                 await writeToSym('y');
             }catch(error){
-                console.log("Error From disconnect()");
+                console.log("Error From symReadings()");
                 console.log(error);
             }
         }
 
         async function purgeSym(){
-            readFromSym('purgeSym');
+            document.getElementById("purgeAndDisconnect").innerHTML = "Pump Runs for 5 Seconds...";
+            console.log("purgeSym()");
             try{
-                await writer.write(sendMessages('<sp>'));
+                await writeToSym('<sp>');
                 await delay(8000);
                 await writeToSym('y');
             }catch(error){
-                console.log("Error From disconnect()");
+                console.log("Error From purgeSym()");
                 console.log(error);
             }
+            document.getElementById("purgeAndDisconnect").innerHTML = "";
         }
 
         async function disconnect(){
+            document.getElementById("purgeAndDisconnect").innerHTML = "Rebooting SYM...";
             try{
-                await writer.write(sendMessages('<sr>'));
+                await writeToSym('<sr>');
             }catch(error){
                 console.log("Error From disconnect()")
                 console.log(error);
             }
-         
         }
 
         function sendMessages(string){
@@ -230,11 +262,23 @@
             return new Promise(resolve => setTimeout(resolve, ms));
         }
 
+        async function symData(){
+            try{
+                await writeToSym('<si>');
+                await delay(2000);
+                await writeToSym('n');
+                await delay(2000);
+                await writeToSym('y');
+            }catch(error){
+                console.log("Error From disconnect()");
+            }
+        }
+
         function showButtons(){
-            document.getElementById("symInfo").style.display = "initial";
-            document.getElementById("symReadings").style.display = "initial";
+            // document.getElementById("symInfo").style.display = "initial";
+            // document.getElementById("symReadings").style.display = "initial";
             document.getElementById("purgeSym").style.display = "initial";
-            document.getElementById("symData").style.display = "initial";
+            // document.getElementById("symData").style.display = "initial";
             document.getElementById("disconnect").style.display = "initial";
             document.getElementById("seeAllDevices").style.display = "none";
             document.getElementById("symByBluetooth").style.display = "none";
@@ -244,10 +288,10 @@
         }
 
         function hideButtons(){
-            document.getElementById("symInfo").style.display = "none";
-            document.getElementById("symReadings").style.display = "none";
+            // document.getElementById("symInfo").style.display = "none";
+            // document.getElementById("symReadings").style.display = "none";
             document.getElementById("purgeSym").style.display = "none";
-            document.getElementById("symData").style.display = "none";
+            // document.getElementById("symData").style.display = "none";
             document.getElementById("disconnect").style.display = "none";
             document.getElementById("seeAllDevices").style.display = "initial";
             document.getElementById("symByBluetooth").style.display = "initial";

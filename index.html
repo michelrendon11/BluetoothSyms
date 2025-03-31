@@ -140,6 +140,7 @@
                 symReadings();
                 await delay(4000);
                 readSymReadings(symResponce);
+                showButtons();
             } catch (error) {
                 console.log("Error From connectSym()");
                 document.getElementById("displayErrors").innerHTML = "" + error;

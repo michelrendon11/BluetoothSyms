@@ -1,0 +1,35 @@
+
+body{background-color: rgb(133, 251, 255);}
+
+#title{ font-family: "palatino"; background-color: rgba(10, 10, 228, 0.759); width: 100%; height: auto; padding: 0.1rem 0; text-align: center; border-radius: 10px; box-shadow: 0px 2px 5px rgb(0, 0, 0); }
+
+.findButtons{display:inline-flexbox; text-align: center; margin-top: 10px; }
+
+h1{ color: white; text-shadow: 3px 2px 2px rgb(0, 0, 0);}
+
+.butt, .butt2, .butt3{ padding: 10px; font-size: 20px; border-radius: 10px; font-weight: bold; margin-top: 5px;  width: 14rem; margin: 3px; display: inline-block; color: white; text-shadow: 2px 2px 2px rgb(0, 0, 0);}
+
+.butt{ background-image: linear-gradient(hsl(250, 100%, 50%), rgb(101, 165, 255)); }
+
+.butt2{ background-image: linear-gradient(rgb(8, 113, 0), rgb(97, 250, 80)); }
+
+.butt3{ background-image: linear-gradient(rgb(153, 1, 1), rgb(255, 144, 144)); }
+
+.ena:hover{ box-shadow: 5px 5px 20px rgb(0, 0, 0); color: rgb(215, 252, 215); }
+
+.ena:active{ box-shadow: 10px 10px 20px rgb(0, 0, 0); color: blue; }
+
+.front{ color: green; font-weight: bold;}
+
+#name, #info{ color: black;}
+
+#resources{margin: auto; width: 90vw; word-wrap: break-word; color: blue;}
+
+.res{color: red; font-weight: bold;}
+
+#displayErrors{color: red;}
+
+#purgeAndDisconnect{ color: red; font-weight: bold; }
+
+.disable, .disable:hover, .disable:active{ background-image: linear-gradient(rgb(37, 37, 37), rgb(113, 113, 113)); color: rgb(209, 208, 208);}
+

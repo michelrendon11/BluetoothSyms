@@ -34,25 +34,11 @@ let server = null;
             const hh = new TextEncoder();
             const hhDecoder = new TextDecoder();
             const array = new Int16Array(hh.encode(str));
-            // const characteristic = await service.getCharacteristic('49535343-026e-3a9b-954c-97daef17e26e');
-            // console.log("Characteristic before");
-            // console.log(characteristic);
-            // characteristic.writeValue(array);
-            // console.log("Chraracteristic after")
-            // console.log(characteristic);
-            const characteristic2 = await service.getCharacteristic('49535343-1e4d-4bd9-ba61-23c647249616');
-            await characteristic2.writeValue(new Int8Array(new TextEncoder('hh', 'utf-8')));
-            // console.log(characteristic2);
-            console.log(characteristic2.value);
-            console.log(characteristic2.readValue());
-            const descriptor = await characteristic2.getDescriptor('00002902-0000-1000-8000-00805f9b34fb');
-            // await descriptor.writeValue(new Int8Array(new TextEncoder('hh', 'uft-8')));
-            // console.log(descriptor);
-            console.log(descriptor.value);
-            console.log(descriptor.readValue());
-            // const reading = await descriptor.readValue();
-            // console.log("Reading")
-            // console.log(reading);
+            const characteristic = await service.getCharacteristic('49535343-1e4d-4bd9-ba61-23c647249616');
+            await characteristic.writeValue(new Int8Array(new TextEncoder('hh', 'utf-8')));
+            const descriptor = await characteristic.getDescriptor('00002902-0000-1000-8000-00805f9b34fb');
+            console.log(await characteristic.readValue(new DataView(new ArrayBuffer(new Int8Array()))));
+            console.log(await descriptor.readValue(new DataView(new ArrayBuffer(new Int8Array()))));
             console.log("Done");
         }
       

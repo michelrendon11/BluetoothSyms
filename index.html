@@ -7,25 +7,27 @@
     <title>Tank Sentry</title>
 </head>
 <body>
-    <div id="title"> <h1>TANK SENTRY</h1> </div>
-    <div class="findButtons">
+    <div id="title">
+        <h1>TANK SENTRY</h1>
+    </div>
+    <div class="container" id="findButtons">
         <button type="button" class="butt connect" id="seeAllDevices" onclick="seeAllDevices()">See Everyting</button>
         <button type="button" class="butt connect" id="symByBluetooth" onclick="symByBluetooth()">SYM by Bluetooth</button>
         <button type="button" class="butt connect" id="connectSym" onclick="connectSym()">Connect SYM</button>
     </div>
-    <div class="findButtons">
+    <div class="container ">
         <p id="displayErrors"></p>
         <p class="front"><span id="name"></span></p>
         <p class="front"><span id="info"></span></p>
-        <p id="displayInfo"></p>
+        <p class="front" id="displayInfo"></p>
         <p id="displaySymInfo"></p>
         <p id="purgeAndDisconnect"></p>
     </div>
-    <div class="findButtons">
+    <div class="container" id="convertCalibrate">
         <button type="button" class="butt set convert" id="convertSym" onclick="convertSym()">Convert SYM to an Older Model</button>
         <button type="button" class="butt set calibrate" id="calibrateSym" onclick="calibrateSym()">Calibrate SYM to Tank Height</button>
     </div>
-    <div class="findButtons calibration">
+    <div class="container" id="calibration">
         <p>Tank "Heigth" accepts a number form 10 to 80, for values bigger than 80 inches convert the sensor to "SYM U"<br/>The empty value can be offset up to 20 inches</p>
         <label for="tHeigth">Tank Heigth:</label>
         <input type="number" id="tHeigth" name="tHeigth" value="10" min="10" max="80" required autofocus><br/>
@@ -36,25 +38,30 @@
         <input type="radio" id="fuel" name="water/fuel" value="Fuel">
         <label for="fuel" class="fuel">Fuel</label><br/>
         <button type="button" class="butt" id="submitCalibration" onclick="submitCalibration()">Submit</button>
-        <button type="button" class="butt back" id="back" onclick="back()">Back</button>
+        <button type="button" class="butt back" id="backCalibrate" onclick="backCalibrate()">Back</button>
     </div>
-    <div class="findButtons">
+    <div class="container" id="conversion">
         <button type="button" class="butt select" id="zsSym" onclick="zsSym()">ZS</button>
         <button type="button" class="butt select" id="zmSym" onclick="zmSym()">ZM</button>
         <button type="button" class="butt select" id="zrSym" onclick="zrSym()">ZR</button>
         <button type="button" class="butt select" id="Sym23qs" onclick="zrSym()">23QS</button>
         <button type="button" class="butt select" id="Sym23qr" onclick="zrSym()">23QR</button>
         <button type="button" class="butt select" id="uSym" onclick="zrSym()">U</button>
-        
+        <div class="container">
+            <button type="button" class="butt back" id="baclConvert" onclick="baclConvert()">Back</button>
+        </div>
     </div>
-    <div class="findButtons">
+    <div class="container" id="purgeDisconnect">
         <button type="button" class="butt request" id="requestMoreData" onclick="requestMoreData()">Request More Data</button>
         <button type="button" class="butt purge" id="purgeSym" onclick="purgeSym()">Purge Sym</button>
+        <div class="container">
+            <button type="button" class="butt disconnect" id="disconnect" onclick="disconnectSym()">Disconnect</button>
+        </div>
     </div>
-    <div class="findButtons">
-        <button type="button" class="butt disconnect" id="disconnect" onclick="disconnect()">Disconnect</button>
+    <div class="container" id="disconnectBluetooth">
+        <button type="button" class="butt disconnect" id="disByBluetooth" onclick="disByBluetooth()">Disconnect</button>
     </div>
-    <div class="findButtons">
+    <div class="container">
         <p id="deviceInfo"></p>
     </div>
     <!-- <div id="resources">
@@ -69,15 +76,15 @@
         <p><span class="res">Read Characteristic Value: </span> https://googlechrome.github.io/samples/web-bluetooth/read-characteristic-value-changed.html</p>
     </div> -->
 
-    <!-- <script src="load.js"></script>
+    <script src="load.js"></script>
+
+    <!-- <script src="findAll.js"></script> -->
+
+    <!-- <script src="bluetooth.js"></script> -->
 
     <script src="connect.js"></script>
 
-    <script src="bluetooth.js"></script>
-
-    <script src="serial.js"></script>
-
-    <script src="findAll.js"></script> -->
+    <!-- <script src="serial.js"></script> -->
 
 </body>
 </html>

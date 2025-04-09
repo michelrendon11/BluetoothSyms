@@ -1,204 +1,223 @@
 
+let port = null;
 let reader = null;
-        let writer = null;
-        let port = null;
-        let symResponce = "";
-        let serialMatch = "";
-        let dateMatch = "";
-        let decimalMatch = "";
-        let currentSettingsMatch = "";
-        let levelRageMatch = "";
-        let currentLevel = "";
-        let screenMessage = "";
+let writer = null;
+let symResponce = "";
+let serialMatch = "";
+let dateMatch = "";
+let decimalMatch = "";
+let currentSettingsMatch = "";
+let levelRageMatch = "";
+let currentLevel = "";
+let screenMessage = "";
+const findButtons = document.getElementById("findButtons");
+const buttonsDisplay = findButtons.style.display;
+const convertCalibrate = document.getElementById("convertCalibrate");
+const convertCalibrateDisplay = findButtons.style.display;
+const purgeDisconnect = document.getElementById("purgeDisconnect");
+const purgeDisconnectDisplay = findButtons.style.display;
 
-        navigator.serial.addEventListener("connect", (e) => {
-            showButtons();
-        });
-        navigator.serial.addEventListener("disconnect", (e) => {
-            hideButtons();
-            document.getElementById("purgeAndDisconnect").innerHTML = "";
-        });
+async function connectSym(){ 
+    try {
+        port = await navigator.serial.requestPort();
+        await port.open({ baudRate: 9600 });
+        const decoder = new TextDecoderStream();
+        port.readable.pipeTo(decoder.writable);
+        const inputStream = decoder.readable;
+        reader = inputStream.getReader();
+        writer = port.writable.getWriter();
+        hideButtons(findButtons, convertCalibrate, convertCalibrateDisplay, purgeDisconnect, purgeDisconnectDisplay);
+        writeToSym('hh');
+        readFromSym();
+        await delay(2000);
+        readHello();
+        symInfo();
+        await delay(3000);
+        readSymInfo();
+        symReadings();
+        await delay(4000);
+        readSymReadings();
+    } catch (error) {
+        console.log("Error From connectSym()");
+        console.log(error);
+        document.getElementById("displayErrors").innerHTML = "" + error;
+    }
+}
 
-        async function connectSym() {
-            try {
-                port = await navigator.serial.requestPort();
-                await port.open({ baudRate: 9600 });
-                const decoder = new TextDecoderStream();
-                port.readable.pipeTo(decoder.writable);
-                const inputStream = decoder.readable;
-                reader = inputStream.getReader();
-                writer = port.writable.getWriter();
-                showButtons();
-                writeToSym('hh');
-                readFromSym();
-                await delay(2000);
-                readHello(symResponce);
-                symInfo();
-                await delay(3000);
-                readSymInfo(symResponce);
-                symReadings();
-                await delay(4000);
-                readSymReadings(symResponce);
-            } catch (error) {
-                console.log("Error From connectSym()");
-                document.getElementById("displayErrors").innerHTML = "" + error;
-            }
-        }
+async function writeToSym(string){
+    console.log("writeToSym()");
+    try{ await writer.write(sendMessages(string));
+    }catch(error){
+        console.log("Error From writeToSym()");
+        console.log(error);
+        document.getElementById("displayErrors").innerHTML = "" + error;
+    }
+}
 
-        async function writeToSym(string) {
-            try{ await writer.write(sendMessages(string));
-            }catch(error){
-                console.log("Error From writeToSym()");
-                document.getElementById("displayErrors").innerHTML = "" + error;
-            }
-        }
-
-        async function readFromSym() {
-            try{
-                while (true) {
-                    const { value, done } = await reader.read();
-                    if (value) {
-                         console.log(value + '\n');
-                         symResponce += value;
-                        }
-                    if (done) {
-                        reader.releaseLock();
-                        break;
-                    }
+async function readFromSym(){
+    console.log("readFromSym()");
+    try{
+        while (true) {
+            const { value, done } = await reader.read();
+            if (value) {
+                    console.log(value + '\n');
+                    symResponce += value;
                 }
-            }catch (error) {
-                console.log("Error From readFromSym()");
-                document.getElementById("displayErrors").innerHTML = "" + error;
-                document.getElementById("purgeAndDisconnect").innerHTML = "";
+            if (done) {
+                reader.releaseLock();
+                break;
             }
         }
+    }catch (error) {
+        console.log("Error From readFromSym()");
+        console.log(error);
+        document.getElementById("displayErrors").innerHTML = "" + error;
+        document.getElementById("purgeAndDisconnect").innerHTML = "";
+    }
+}
 
-        function readHello(s){
-            console.log("readHello()");
-            serialMatch = s.match(/[0-9]{6}/g );
-            screenMessage = "SYM U - Serial# " + serialMatch + "<br/>";
-            document.getElementById("displayInfo").innerHTML = screenMessage;
-            symResponce = "";
-        }
+function readHello(){
+    console.log("readHello()");
+    try{
+        serialMatch = symResponce.match(/[0-9]{6}/g );
+        screenMessage = "SYM U - Serial# " + serialMatch + "<br/>";
+        document.getElementById("displayInfo").innerHTML = screenMessage;
+        symResponce = "";
+    }catch(error){
+        console.log("Error From readHello()");
+        console.log(error);
+    }
+}
 
-        function readSymInfo(s){
-            console.log("readSymInfo()");
-            dateMatch = s.match(/\d{2}\/\d{2}\/\d{4}/g);
-            decimalMatch = s.match(/\d{1}\.\d{2}/g);
-            currentSettingsMatch = s.slice(0, ((s.search(/[0-9]/))-2));
-            levelRageMatch = s.match(/0 -\ [0-9]{2,3}/g);
-            screenMessage += "Firmware Version: " + decimalMatch[2] + "<br/>" +
-            "Production Date: " + dateMatch + "<br/>" +
-            currentSettingsMatch + " " + levelRageMatch + "<br/>" +
-            "Output Voltage Range: " + decimalMatch[0] + " - " + decimalMatch[1] + "<br/>";
-            document.getElementById("displayInfo").innerHTML = screenMessage;
-            symResponce = "";
-        }
+function readSymInfo(){
+    console.log("readSymInfo()");
+    try{
+        dateMatch = symResponce.match(/\d{2}\/\d{2}\/\d{4}/g);
+        decimalMatch = symResponce.match(/\d{1}\.\d{2}/g);
+        levelRageMatch = symResponce.match(/0 -\ [0-9]{2,3}/g);
+        currentSettingsMatch = symResponce.slice(0, ((symResponce.search(/[0-9]/))-2));
+        screenMessage += "Firmware Version: " + decimalMatch[2] + "<br/>" + "Production Date: " + dateMatch + "<br/>" + currentSettingsMatch + " " + levelRageMatch + "<br/>" + "Output Voltage Range: " + decimalMatch[0] + " - " + decimalMatch[1] + "<br/>";
+        document.getElementById("displayInfo").innerHTML = screenMessage;
+        symResponce = "";
+    }catch(error){
+        console.log("Error From readSymInfo()");
+        console.log(error);
+    }
+}
 
-        function readSymReadings(s){
-            console.log("readSymReadings()");
-            currentLevel = s.slice(0, (s.search(/vdc/i)));
-            screenMessage += "Current Level: " + "<br/>" + currentLevel;
-            document.getElementById("displayInfo").innerHTML = screenMessage;
-            symResponce = "";
-        }
+function readSymReadings(){
+    console.log("readSymReadings()");
+    try{
+        currentLevel = symResponce.slice(0, (symResponce.search(/vdc/i)));
+        screenMessage += "Current Level: " + currentLevel;
+        document.getElementById("displayInfo").innerHTML = screenMessage;
+        symResponce = "";
+    }catch(error){
+        console.log("Error From readSymReadings()");
+        console.log(error);
+    }
+}
 
-        async function symInfo(){
-            console.log("symInfo()");
-            try{
-                await writeToSym('<sc>');
-                await delay(2000);
-                await writeToSym('y');
-            }catch(error){
-                console.log("Error From symInfo()");
-            }
-        }
+async function symInfo(){
+    console.log("symInfo()");
+    try{
+        await writeToSym('<sc>');
+        await delay(2000);
+        await writeToSym('y');
+    }catch(error){
+        console.log("Error From symInfo()");
+        console.log(error);
+    }
+}
 
-        async function symReadings(){
-            console.log("symReadings()");
-            try{
-                await writeToSym('<sd>');
-                await delay(2000);
-                await writeToSym('n');
-                await delay(2000);
-                await writeToSym('y');
-            }catch(error){
-                console.log("Error From symReadings()");
-                console.log(error);
-            }
-        }
+async function symReadings(){
+    console.log("symReadings()");
+    try{
+        await writeToSym('<sd>');
+        await delay(2000);
+        await writeToSym('n');
+        await delay(2000);
+        await writeToSym('y');
+    }catch(error){
+        console.log("Error From symReadings()");
+        console.log(error);
+    }
+}
 
-        async function purgeSym(){
-            document.getElementById("purgeAndDisconnect").innerHTML = "Pump Runs for 5 Seconds...";
-            console.log("purgeSym()");
-            try{
-                await writeToSym('<sp>');
-                await delay(8000);
-                await writeToSym('y');
-            }catch(error){
-                console.log("Error From purgeSym()");
-                console.log(error);
-            }
-            document.getElementById("purgeAndDisconnect").innerHTML = "";
-        }
+async function purgeSym(){
+    document.getElementById("purgeAndDisconnect").innerHTML = "Pump Runs for 5 Seconds...";
+    console.log("purgeSym()");
+    try{
+        await writeToSym('<sp>');
+        await delay(8000);
+        await writeToSym('y');
+    }catch(error){
+        console.log("Error From purgeSym()");
+        console.log(error);
+    }
+    document.getElementById("purgeAndDisconnect").innerHTML = "";
+}
 
-        async function disconnect(){
-            document.getElementById("purgeAndDisconnect").innerHTML = "Rebooting SYM...";
-            try{
-                await writeToSym('<sr>');
-                hideButtons();
-            }catch(error){
-                document.getElementById("purgeAndDisconnect").innerHTML = "";
-                console.log("Error From disconnect()")
-                console.log(error);
-            }
-        }
+async function disconnectSym(){
+    console.log("disconnectSym()");
+    document.getElementById("purgeAndDisconnect").innerHTML = "Rebooting SYM...";
+    try{
+        await writeToSym('<sr>');
+    }catch(error){
+        document.getElementById("purgeAndDisconnect").innerHTML = "";
+        console.log("Error From disconnect()")
+        console.log(error);
+    }
+}
 
-        function sendMessages(string){
-            const encoder = new TextEncoder();
-            const encoded = encoder.encode(string);
-            return new Int8Array(encoded)
-        }
+function sendMessages(string){
+    console.log("sendMessages()");
+    try{
+        const encoder = new TextEncoder();
+        const encoded = encoder.encode(string);
+        return new Int8Array(encoded)
+    }catch(error){
+        console.log("Error from sendMessages()");
+        console.log(error);
+    }
+}
 
-        async function delay(ms) {
-            return new Promise(resolve => setTimeout(resolve, ms));
-        }
+async function delay(ms){
+    return new Promise(resolve => setTimeout(resolve, ms));
+}
 
-        async function symData(){
-            try{
-                await writeToSym('<si>');
-                await delay(2000);
-                await writeToSym('n');
-                await delay(2000);
-                await writeToSym('y');
-            }catch(error){
-                console.log("Error From disconnect()");
-            }
-        }
+async function symData(){
+    console.log("symData()");
+    try{
+        await writeToSym('<si>');
+        await delay(2000);
+        await writeToSym('n');
+        await delay(2000);
+        await writeToSym('y');
+    }catch(error){
+        console.log("Error From disconnect()");
+        console.log(error);
+    }
+}
 
-        function showButtons(){
-            // document.getElementById("symInfo").style.display = "initial";
-            // document.getElementById("symReadings").style.display = "initial";
-            document.getElementById("purgeSym").style.display = "initial";
-            // document.getElementById("symData").style.display = "initial";
-            document.getElementById("disconnect").style.display = "initial";
-            document.getElementById("seeAllDevices").style.display = "none";
-            document.getElementById("symByBluetooth").style.display = "none";
-            document.getElementById("symBySerial").style.display = "none";
-            document.getElementById("connectSym").style.display = "none";
-            document.getElementById("displayErrors").innerHTML = "";
-        }
+function showButtons(){
+    document.getElementById("displayErrors").innerHTML = "";
+}
 
-        function hideButtons(){
-            // document.getElementById("symInfo").style.display = "none";
-            // document.getElementById("symReadings").style.display = "none";
-            document.getElementById("purgeSym").style.display = "none";
-            // document.getElementById("symData").style.display = "none";
-            document.getElementById("disconnect").style.display = "none";
-            document.getElementById("seeAllDevices").style.display = "initial";
-            document.getElementById("symByBluetooth").style.display = "initial";
-            document.getElementById("symBySerial").style.display = "initial";
-            document.getElementById("connectSym").style.display = "initial";
-            document.getElementById("displayErrors").innerHTML = "";
-            document.getElementById("displayInfo").innerHTML = "";
-        }
+function hideButtons(){
+    findButtons.style.display = "none";
+    convertCalibrate.style.display = convertCalibrateDisplay;
+    purgeDisconnect.style.display = purgeDisconnectDisplay;
+    document.getElementById("displayErrors").innerHTML = "";
+    document.getElementById("displayInfo").innerHTML = "";
+}
+
+navigator.serial.addEventListener("connect", (e) => {
+    // showButtons();
+});
+navigator.serial.addEventListener("disconnect", (e) => {
+    // hideButtons();
+    document.getElementById("purgeAndDisconnect").innerHTML = "";
+});
+
+

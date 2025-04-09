@@ -12,20 +12,15 @@ window.onload = function(){
         console.log(br[i].brand + ": " + br[i].version);
         platformInfo += br[i].brand + ": " + br[i].version + "<br/>"
     }
+    platformInfo += "<br/>" + navigator.appVersion;
     document.getElementById("deviceInfo").innerHTML = platformInfo;
-    // showButtons();
     function refreshPage(){
-        document.getElementById("seeAllDevices").style.display = "initial";
-        document.getElementById("symByBluetooth").style.display = "initial";
-        document.getElementById("symBySerial").style.display = "initial";
-        document.getElementById("connectSym").style.display = "initial";
-        // document.getElementById("symInfo").style.display = "none";
-        // document.getElementById("symReadings").style.display = "none";
-        document.getElementById("purgeSym").style.display = "none";
-        // document.getElementById("symData").style.display = "none";
-        document.getElementById("disconnect").style.display = "none";
-        document.getElementById("disconnectSymByBluetooth").style.display = "none";
-        document.getElementById("disconnectSymBySerial").style.display = "none";
+        document.getElementById("findButtons").style.display = "inline-flexbox";
+        document.getElementById("convertCalibrate").style.display = "none";
+        document.getElementById("calibration").style.display = "none";
+        document.getElementById("conversion").style.display = "none";
+        document.getElementById("purgeDisconnect").style.display = "none";
+        document.getElementById("disconnectBluetooth").style.display = "none";
         document.getElementById("displayErrors").innerHTML = "";
     }
 }

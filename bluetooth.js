@@ -2,7 +2,7 @@
 let server = null;
 let device = null;
 const findButtons = document.getElementById("findButtons");
-const disconnect = document.getElementById("disconnectBluetooth");
+const disconnectBluetooth = document.getElementById("disconnectBluetooth");
 const buttonsDisplay = findButtons.style.display;
 const disconnectDisplay = disconnect.style.display;
 
@@ -54,7 +54,6 @@ function displaySymName(name){
     document.getElementById("name").innerHTML = "Name: " + name.name;
     document.getElementById("info").innerHTML = "ID: " + name.id; 
     document.getElementById("displayInfo").innerHTML = "Server Connected: " + name.gatt;
-
 }
         
 function disByBluetooth(){

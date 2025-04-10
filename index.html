@@ -33,9 +33,9 @@
         <input type="number" id="tHeigth" name="tHeigth" value="10" min="10" max="80" required autofocus><br/>
         <label for="ePoint">Emtpy Point:</label>
         <input type="number" id="ePoint" name="ePoint" value="0" min="0" max="20" required><br/>
-        <input type="radio" id="water" name="water/fuel" value="water" checked="checked">
+        <input type="radio" id="water" name="water/fuel" value="W" checked="checked">
         <label for="water" class="water">Water</label>
-        <input type="radio" id="fuel" name="water/fuel" value="Fuel">
+        <input type="radio" id="fuel" name="water/fuel" value="D">
         <label for="fuel" class="fuel">Fuel</label><br/>
         <button type="button" class="butt" id="submitCalibration" onclick="submitCalibration()">Submit</button>
         <button type="button" class="butt back" id="backCalibrate" onclick="backCalibrate()">Back</button>
@@ -44,9 +44,9 @@
         <button type="button" class="butt select" id="zsSym" onclick="zsSym()">ZS</button>
         <button type="button" class="butt select" id="zmSym" onclick="zmSym()">ZM</button>
         <button type="button" class="butt select" id="zrSym" onclick="zrSym()">ZR</button>
-        <button type="button" class="butt select" id="Sym23qs" onclick="zrSym()">23QS</button>
-        <button type="button" class="butt select" id="Sym23qr" onclick="zrSym()">23QR</button>
-        <button type="button" class="butt select" id="uSym" onclick="zrSym()">U</button>
+        <button type="button" class="butt select" id="sym23qs" onclick="sym23qs()">23QS</button>
+        <button type="button" class="butt select" id="sym23qr" onclick="sym23qr()">23QR</button>
+        <button type="button" class="butt select" id="uSym" onclick="uSym()">U</button>
         <div class="container">
             <button type="button" class="butt back" id="baclConvert" onclick="baclConvert()">Back</button>
         </div>
@@ -76,7 +76,7 @@
         <p><span class="res">Read Characteristic Value: </span> https://googlechrome.github.io/samples/web-bluetooth/read-characteristic-value-changed.html</p>
     </div> -->
 
-    <script src="load.js"></script>
+    <!-- <script src="load.js"></script> -->
 
     <!-- <script src="findAll.js"></script> -->
 

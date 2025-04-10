@@ -3,7 +3,9 @@
 let s1 = "HELLO SYM U Serial# 104309 Please choose an inquire: For SYM info: . . . . . <sc> To purge SYM: . . . . <sp> Put SYM on HOLD:  <sh> For SYM readings: . <sd> To calibrate: . . . . . . <C,> To Replace old SYM:  <ZS>  <ZM>  <ZR>  <23QS>  <23QR>  SYM U Ori ginal  <ZU> For fluid type Water <UW> or Diesel  <UD> To finish . . . . . . . . . <SR></SR>";
 
 // "Sym Info"->
-let s2 = "SYM  U Full Scale P range:  (0 - 132) in H2O) V output: (0.30 - 4.67) VDC) Firmware Version: 3.10 Production Date: 06/01/2025 DONE More inquires ? Send 'Y' or 'N' Please choose an inquire: For SYM info: . . . . . <sc> To purge SYM: . . . . <sp> Put SYM on HOLD:  <sh> For SYM readings: . <sd> To calibrate: . . . . . . <C,> To Replace old SYM: <ZS>  <ZM>  <ZR>  <23QS>  <23QR>  SYM U Original  <ZU> For fluid type Water <UW> or Diesel  <UD> To finish . . . . . . . . . <SR></SR>";
+let s2 = "SYM 23QS P range: "
+
+"(0 - 132) in H2O) V output: (0.30 - 4.67) VDC) Firmware Version: 3.10 Production Date: 06/01/2025 DONE More inquires ? Send 'Y' or 'N' Please choose an inquire: For SYM info: . . . . . <sc> To purge SYM: . . . . <sp> Put SYM on HOLD:  <sh> For SYM readings: . <sd> To calibrate: . . . . . . <C,> To Replace old SYM: <ZS>  <ZM>  <ZR>  <23QS>  <23QR>  SYM U Original  <ZU> For fluid type Water <UW> or Diesel  <UD> To finish . . . . . . . . . <SR></SR>";
 
 // "Sym Readings"->
 let s3 = "ADC pointer = 132 001,0 Inches of Water Voltage Output = 0.3 VDC Send 'Y' or 'N'DONE More inquires ? Send 'Y' or 'N' Please choose an inquire: For SYM info: . . . . . <sc> To purge SYM: . . . . <sp> Put SYM on HOLD:  <sh> For SYM readings: . <sd> To calibrate: . . . . . . <C,> To Replace old SYM:  <ZS>  <ZM>  <ZR> index.html:146  <23QS>  <23QR> SYM U Original  <ZU> For fluid type Water <UW> or Diesel  <UD> To finish . . . . . . . . . <SR></SR>";

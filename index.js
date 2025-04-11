@@ -191,8 +191,8 @@ async function hh() {
 
 async function sc(){
     try{
-        await writeToSym('<sc>');
-        textAreaId.innerHTML += '-->> <sc>' + '\n';
+        await writeToSym('<SC>');
+        textAreaId.innerHTML += '-->> <SC>' + '\n';
     }catch(error){
         console.log(error);
     }
@@ -200,8 +200,8 @@ async function sc(){
 
 async function sp(){
     try{
-        await writeToSym('<sp>');
-        textAreaId.innerHTML += '-->> <sp>' + '\n';
+        await writeToSym('<SP>');
+        textAreaId.innerHTML += '-->> <SP>' + '\n';
     }catch(error){
         console.log(error);
     }
@@ -209,8 +209,8 @@ async function sp(){
 
 async function sd(){
     try{
-        await writeToSym('<sd>');
-        textAreaId.innerHTML += '-->> <sc>' + '\n';
+        await writeToSym('<SD>');
+        textAreaId.innerHTML += '-->> <SD>' + '\n';
     }catch(error){
         console.log(error);
     }
@@ -218,8 +218,8 @@ async function sd(){
 
 async function y(){
     try{
-        await writeToSym('y');
-        textAreaId.innerHTML += '-->> y' + '\n';
+        await writeToSym('Y');
+        textAreaId.innerHTML += '-->> Y' + '\n';
     }catch(error){
         console.log(error);
     }
@@ -227,8 +227,8 @@ async function y(){
 
 async function n(){
     try{
-        await writeToSym('n');
-        textAreaId.innerHTML += '-->> n' + '\n';
+        await writeToSym('N');
+        textAreaId.innerHTML += '-->> N' + '\n';
     }catch(error){
         console.log(error);
     }
@@ -236,8 +236,8 @@ async function n(){
 
 async function zsSym(){
     try{
-        await writeToSym('<zs>');
-        textAreaId.innerHTML += '-->> <zs>' + '\n';
+        await writeToSym('<ZS>');
+        textAreaId.innerHTML += '-->> <ZS>' + '\n';
     }catch(error){
         console.log(error);
     }
@@ -245,8 +245,8 @@ async function zsSym(){
 
 async function zmSym(){
     try{
-        await writeToSym('<zm>');
-        textAreaId.innerHTML += '-->> <zm>' + '\n';
+        await writeToSym('<ZM>');
+        textAreaId.innerHTML += '-->> <ZM>' + '\n';
     }catch(error){
         console.log(error);
     }
@@ -254,8 +254,8 @@ async function zmSym(){
 
 async function zrSym(){
     try{
-        await writeToSym('<zr>');
-        textAreaId.innerHTML += '-->> <zr>' + '\n';
+        await writeToSym('<ZR>');
+        textAreaId.innerHTML += '-->> <ZR>' + '\n';
     }catch(error){
         console.log(error);
     }
@@ -263,8 +263,8 @@ async function zrSym(){
 
 async function sym23qs(){
     try{
-        await writeToSym('<23qs>');
-        textAreaId.innerHTML += '-->> <23qs>' + '\n';
+        await writeToSym('<23QS>');
+        textAreaId.innerHTML += '-->> <23QS>' + '\n';
     }catch(error){
         console.log(error);
     }
@@ -272,8 +272,8 @@ async function sym23qs(){
 
 async function sym23qr(){
     try{
-        await writeToSym('<23qr>');
-        textAreaId.innerHTML += '-->> <23qr>' + '\n';
+        await writeToSym('<23QR>');
+        textAreaId.innerHTML += '-->> <23QR>' + '\n';
     }catch(error){
         console.log(error);
     }
@@ -281,8 +281,8 @@ async function sym23qr(){
 
 async function uSym(){
     try{
-        await writeToSym('<zu>');
-        textAreaId.innerHTML += '-->> <zu>' + '\n';
+        await writeToSym('<ZU>');
+        textAreaId.innerHTML += '-->> <ZU>' + '\n';
     }catch(error){
         console.log(error);
     }
@@ -290,10 +290,11 @@ async function uSym(){
 
 async function reboot(){
     try{
-        await writeToSym('<sr>');
-        textAreaId.innerHTML += '-->> <sr>' + '\n';
+        await writeToSym('<SR>');
+        textAreaId.innerHTML += '-->> <SR>' + '\n';
         hhId.disabled = true;
         hhId.classList.add("disable");
+        textAreaId.value = '';
     }catch(error){
         console.log(error);
     }

@@ -1,13 +1,13 @@
 
-body{background-color: rgb(133, 251, 255);}
-#title{ font-family: "palatino"; background-color: rgba(10, 10, 228, 0.759); width: 100%; height: auto; padding: 0.1rem 0; text-align: center; border-radius: 10px; box-shadow: 0px 2px 5px rgb(0, 0, 0); }
+body{background-color: rgb(255, 255, 255);}
+#title{ font-family: "aptos"; background-color: rgb(2, 32, 202); width: 100%; height: auto; padding: 0.1rem 0; text-align: center; border-radius: 10px; box-shadow: 0px 2px 5px rgb(0, 0, 0); }
 h1{ color: white; text-shadow: 3px 2px 2px rgb(0, 0, 0); }
 
 textarea{ resize: none; background-color: black; color: greenyellow; border-radius: 10px; border-width: 10px; width: 70%;}
 
 .container{display:inline-flexbox; text-align: center; margin-top: 10px; }
 
-.butt{ padding: 10px; font-size: 16px; border-radius: 10px; font-weight: bold; margin-top: 5px;  width: 15rem; margin: 3px; color: white; text-shadow: 2px 2px 2px rgb(0, 0, 0); background-image: linear-gradient(rgb(34, 0, 255), rgb(130, 184, 243)); }
+.butt{ padding: 10px; font-size: 16px; border-radius: 10px; font-weight: bold; margin-top: 5px;  width: 15rem; margin: 3px; color: white; text-shadow: 2px 2px 2px rgb(0, 0, 0); background-image: linear-gradient(rgb(2, 32, 255), rgb(59, 150, 248)); }
 .butt:hover{ box-shadow: 5px 5px 20px rgb(0, 0, 0); color: rgb(3, 255, 3); }
 .butt:active{ box-shadow: 10px 10px 20px rgb(0, 0, 0); color: rgb(252, 244, 1); }
 .select{ width: 7rem; margin-inline: 0.5rem;}
@@ -16,11 +16,11 @@ textarea{ resize: none; background-color: black; color: greenyellow; border-radi
 .zsSym{ background-image: linear-gradient(rgb(4, 13, 0), rgb(145, 148, 145));}
 .zmSym{ background-image: linear-gradient(rgb(17, 0, 254), rgb(68, 193, 247));}
 .zrSym{ background-image: linear-gradient(rgb(13, 138, 2), rgb(120, 253, 63));}
-.Sym23qs{ background-image: linear-gradient(rgb(1, 1, 1), rgb(255, 255, 255));}
-.Sym23qr{ background-image: linear-gradient(rgb(1, 1, 1), rgb(255, 255, 255));}
+.sym23qs{ background-image: linear-gradient(rgb(1, 1, 1), rgb(255, 255, 255));}
+.sym23qr{ background-image: linear-gradient(rgb(1, 1, 1), rgb(255, 255, 255));}
 .uSym{ background-image: linear-gradient(rgb(216, 97, 0), rgb(245, 210, 180));}
 
-#calibration{font-weight: bold; font-size: 1.3rem; box-sizing: border-box; padding-top: 1rem; background-color: rgb(176, 251, 255); border-radius: 10px; border: 0.1rem solid rgba(10, 10, 228, 0.759); width: 90%; align-items: center; margin: auto; margin-top: 1rem; height: auto;}
+#calibration{font-weight: bold; font-size: 1.3rem; box-sizing: border-box; padding-top: 1rem; background-color: rgb(234, 253, 253); border-radius: 10px; border: 0.1rem solid rgb(2, 32, 202); width: 90%; align-items: center; margin: auto; margin-top: 1rem; height: auto;}
 .container2, .container3{ display: inline-block;}
 @media screen and (max-width: 700px) { .container2 { display: block; } }
 @media screen and (max-width: 1000px) { .container3 { display: block; } }

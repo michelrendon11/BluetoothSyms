@@ -1,41 +1,36 @@
 
 body{background-color: rgb(133, 251, 255);}
 #title{ font-family: "palatino"; background-color: rgba(10, 10, 228, 0.759); width: 100%; height: auto; padding: 0.1rem 0; text-align: center; border-radius: 10px; box-shadow: 0px 2px 5px rgb(0, 0, 0); }
-h1{ color: white; text-shadow: 3px 2px 2px rgb(0, 0, 0);}
+h1{ color: white; text-shadow: 3px 2px 2px rgb(0, 0, 0); }
+
+textarea{ resize: none; background-color: black; color: greenyellow; border-radius: 10px; border-width: 10px; width: 70%;}
 
 .container{display:inline-flexbox; text-align: center; margin-top: 10px; }
-.butt{ padding: 10px; font-size: 20px; border-radius: 10px; font-weight: bold; margin-top: 5px;  width: 14rem; margin: 3px; display: inline-block; color: white; text-shadow: 2px 2px 2px rgb(0, 0, 0); margin-inline: 1rem; background-image: linear-gradient(rgb(34, 0, 255), rgb(130, 184, 243));}
+
+.butt{ padding: 10px; font-size: 16px; border-radius: 10px; font-weight: bold; margin-top: 5px;  width: 15rem; margin: 3px; color: white; text-shadow: 2px 2px 2px rgb(0, 0, 0); background-image: linear-gradient(rgb(34, 0, 255), rgb(130, 184, 243)); }
 .butt:hover{ box-shadow: 5px 5px 20px rgb(0, 0, 0); color: rgb(3, 255, 3); }
 .butt:active{ box-shadow: 10px 10px 20px rgb(0, 0, 0); color: rgb(252, 244, 1); }
-.set{ width: 22rem; margin-left: 1.5rem;}
-.select{ width: 8rem; margin-inline: 0.5rem;}
+.select{ width: 7rem; margin-inline: 0.5rem;}
+.set{ width: 9rem; margin-inline: 0.5rem;}
 
-.front{ color: green; font-weight: bold;}
-#name, #info{ color: black;}
-#displayErrors{color: red;}
-#purgeAndDisconnect{ color: red; font-weight: bold; }
+.zsSym{ background-image: linear-gradient(rgb(4, 13, 0), rgb(145, 148, 145));}
+.zmSym{ background-image: linear-gradient(rgb(17, 0, 254), rgb(68, 193, 247));}
+.zrSym{ background-image: linear-gradient(rgb(13, 138, 2), rgb(120, 253, 63));}
+.Sym23qs{ background-image: linear-gradient(rgb(1, 1, 1), rgb(255, 255, 255));}
+.Sym23qr{ background-image: linear-gradient(rgb(1, 1, 1), rgb(255, 255, 255));}
+.uSym{ background-image: linear-gradient(rgb(216, 97, 0), rgb(245, 210, 180));}
 
-.convert{ background-image: linear-gradient( rgb(34, 0, 255), rgb(130, 184, 243));}
-.calibrate{ background-image: linear-gradient(rgb(115, 119, 0), rgb(234, 249, 103));}
+#calibration{font-weight: bold; font-size: 1.3rem; box-sizing: border-box; padding-top: 1rem; background-color: rgb(176, 251, 255); border-radius: 10px; border: 0.1rem solid rgba(10, 10, 228, 0.759); width: 90%; align-items: center; margin: auto; margin-top: 1rem; height: auto;}
+.container2, .container3{ display: inline-block;}
+@media screen and (max-width: 700px) { .container2 { display: block; } }
+@media screen and (max-width: 1000px) { .container3 { display: block; } }
 
-#zsSym{ background-image: linear-gradient(rgb(4, 13, 0), rgb(145, 148, 145));}
-#zmSym{ background-image: linear-gradient(rgb(17, 0, 254), rgb(68, 193, 247));}
-#zrSym{ background-image: linear-gradient(rgb(13, 138, 2), rgb(120, 253, 63));}
-#Sym23qs{ background-image: linear-gradient(rgb(1, 1, 1), rgb(255, 255, 255));}
-#Sym23qr{ background-image: linear-gradient(rgb(1, 1, 1), rgb(255, 255, 255));}
-#uSym{ background-image: linear-gradient(rgb(216, 97, 0), rgb(245, 210, 180));}
+div input, div label{font-size: 1rem; color: black; margin: 0.3rem 0rem; padding-inline: 0.5rem; display: inline;}
+.water:hover { color: blue; cursor: pointer; font-size: 1.2rem;}
+.fuel:hover { color: red; cursor: pointer; font-size: 1.2rem;}
 
-#calibration{font-weight: bold; font-size: 1.3rem; color: red; box-sizing: border-box; margin: 1rem; }
-div input, div label{font-size: 1.5rem; color: black; margin: 0.5rem 0rem; padding-inline: 0.5rem;}
-#water, #fuel{ width: 2rem; height: 1.5rem; margin-right: 0; cursor: pointer; margin: 2rem 0rem;}
-.water:hover { color: blue; cursor: pointer;}
-.fuel:hover { color: red; cursor: pointer;}
-#submitCalibration{background-image: linear-gradient(rgb(1, 90, 1), rgb(8, 254, 61)); margin-bottom: 1rem;}
-.back{background-image: linear-gradient(rgb(125, 129, 3), rgb(252, 244, 9));}
+.submit{background-image: linear-gradient(rgb(1, 90, 1), rgb(8, 254, 61)); margin-bottom: 1rem; width: 9rem;}
 
-.request{ background-image: linear-gradient(rgb(34, 0, 255), rgb(130, 184, 243)); color: rgb(255, 255, 255); text-shadow: 2px 2px 1px rgb(0, 0, 0); width: 16rem;}
-.purge{ background-image: linear-gradient(rgb(0, 91, 11), rgb(99, 242, 109)); }
 .disconnect{ background-image: linear-gradient(rgb(153, 1, 1), rgb(255, 144, 144)); }
 
-.disable, .disable:hover, .disable:active{ background-image: linear-gradient(rgb(170, 170, 170), rgb(150, 150, 150)); color: rgb(90, 90, 90); box-shadow: 0px 0px 0px rgb(0, 0, 0); text-shadow: 0px 0px 0px rgb(0, 0, 0); border-color: transparent;}
-
+.disable, .disable:hover, .disable:active{ background-image: linear-gradient(rgb(170, 170, 170), rgb(150, 150, 150)); color: rgb(90, 90, 90); box-shadow: 0px 0px 0px rgb(0, 0, 0); text-shadow: 0px 0px 0px rgb(0, 0, 0); border-color: transparent; font-size: 1rem;}

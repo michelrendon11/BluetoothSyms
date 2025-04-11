@@ -11,59 +11,67 @@
         <h1>TANK SENTRY</h1>
     </div>
     <div class="container" id="findButtons">
-        <button type="button" class="butt connect" id="seeAllDevices" onclick="seeAllDevices()">See Everyting</button>
-        <button type="button" class="butt connect" id="symByBluetooth" onclick="symByBluetooth()">SYM by Bluetooth</button>
-        <button type="button" class="butt connect" id="connectSym" onclick="connectSym()">Connect SYM</button>
+        <button type="button" class="butt" id="seeEverythingId" onclick="seeEverything()">See Everyting</button>
+        <button type="button" class="butt" id="symBluetoothId" onclick="symBluetooth()">SYM by Bluetooth</button>
+        <button type="button" class="butt" id="connectSymId" onclick="connectSym()">Connect SYM</button>
+    </div>
+    <div class="container">
+        <textarea name="textArea" id="textAreaId" rows="20" cols="80" disabled wrap="hard"></textarea>
     </div>
     <div class="container ">
         <p id="displayErrors"></p>
-        <p class="front"><span id="name"></span></p>
-        <p class="front"><span id="info"></span></p>
-        <p class="front" id="displayInfo"></p>
-        <p id="displaySymInfo"></p>
-        <p id="purgeAndDisconnect"></p>
     </div>
-    <div class="container" id="convertCalibrate">
-        <button type="button" class="butt set convert" id="convertSym" onclick="convertSym()">Convert SYM to an Older Model</button>
-        <button type="button" class="butt set calibrate" id="calibrateSym" onclick="calibrateSym()">Calibrate SYM to Tank Height</button>
+    <div class="container" id="">
+        <button type="button" class="butt set disable" id="hhId" onclick="hh()" disabled>Connect / hh</button>
+        <button type="button" class="butt set disable" id="scId" onclick="sc()" disabled>Settings &lt sc &gt</button>
+        <button type="button" class="butt set  disable" id="spId" onclick="sp()" disabled>Purge &lt sp &gt</button>
+        <button type="button" class="butt set disable" id="sdId" onclick="sd()" disabled>Data &lt sd &gt</button>
+        <button type="button" class="butt set disable" id="yId" onclick="y()" disabled>Yes &lt y &gt</button>
+        <button type="button" class="butt set disable" id="nId" onclick="n()" disabled>No &lt n &gt</button>
+    </div>
+    <div class="container" id="">
+        <button type="button" class="butt select zsSym disable" id="zsSymId" onclick="zsSym()" disabled>&lt ZS &gt</button>
+        <button type="button" class="butt select zmSym disable" id="zmSymId" onclick="zmSym()" disabled>&lt ZM &gt</button>
+        <button type="button" class="butt select zrSym disable" id="zrSymId" onclick="zrSym()" disabled>&lt ZR &gt</button>
+        <button type="button" class="butt select sym23qs disable" id="sym23qsId" onclick="sym23qs()" disabled>&lt 23QS &gt</button>
+        <button type="button" class="butt select sym23qr disable" id="sym23qrId" onclick="sym23qr()" disabled>&lt 23QR &gt</button>
+        <button type="button" class="butt select uSym disable" id="uSymId" onclick="uSym()" disabled>&lt U &gt</button>
     </div>
     <div class="container" id="calibration">
-        <p>Tank "Heigth" accepts a number form 10 to 80, for values bigger than 80 inches convert the sensor to "SYM U"<br/>The empty value can be offset up to 20 inches</p>
-        <label for="tHeigth">Tank Heigth:</label>
-        <input type="number" id="tHeigth" name="tHeigth" value="10" min="10" max="80" required autofocus><br/>
-        <label for="ePoint">Emtpy Point:</label>
-        <input type="number" id="ePoint" name="ePoint" value="0" min="0" max="20" required><br/>
-        <input type="radio" id="water" name="water/fuel" value="W" checked="checked">
-        <label for="water" class="water">Water</label>
-        <input type="radio" id="fuel" name="water/fuel" value="D">
-        <label for="fuel" class="fuel">Fuel</label><br/>
-        <button type="button" class="butt" id="submitCalibration" onclick="submitCalibration()">Submit</button>
-        <button type="button" class="butt back" id="backCalibrate" onclick="backCalibrate()">Back</button>
-    </div>
-    <div class="container" id="conversion">
-        <button type="button" class="butt select" id="zsSym" onclick="zsSym()">ZS</button>
-        <button type="button" class="butt select" id="zmSym" onclick="zmSym()">ZM</button>
-        <button type="button" class="butt select" id="zrSym" onclick="zrSym()">ZR</button>
-        <button type="button" class="butt select" id="sym23qs" onclick="sym23qs()">23QS</button>
-        <button type="button" class="butt select" id="sym23qr" onclick="sym23qr()">23QR</button>
-        <button type="button" class="butt select" id="uSym" onclick="uSym()">U</button>
-        <div class="container">
-            <button type="button" class="butt back" id="baclConvert" onclick="baclConvert()">Back</button>
+        <div class="container3">
+            <button type="button" class="butt set disable" id="" onclick="uSym()" disabled>Calibrate &lt C, &gt</button>
+        </div>
+        <div class="container2">
+            <label for="tHeigth">Tank Heigth:</label>
+            <input type="number" id="tHeigth" name="tHeigth" class="disable" value="10" min="10" max="80" required autofocus disabled>
+        </div>
+        <div class="container2">
+            <label for="ePoint">Emtpy Point:</label>
+            <input type="number" id="ePoint" name="ePoint" class="disable" value="0" min="0" max="20" required disabled>
+        </div>
+        <div class="container2">
+            <input type="radio" id="water" name="water/fuel" value="W" class="disable" checked="checked" disabled>
+            <label for="water" class="water disable">Water</label>
+            <input type="radio" id="fuel" name="water/fuel" value="D" disabled>
+            <label for="fuel" class="fuel disable">Fuel</label>
+        </div>
+        <div class="container3">
+            <button type="button" class="butt submit disable" id="" onclick="" disabled>Submit</button>
         </div>
     </div>
-    <div class="container" id="purgeDisconnect">
-        <button type="button" class="butt request" id="requestMoreData" onclick="requestMoreData()">Request More Data</button>
-        <button type="button" class="butt purge" id="purgeSym" onclick="purgeSym()">Purge Sym</button>
-        <div class="container">
-            <button type="button" class="butt disconnect" id="disconnect" onclick="disconnectSym()">Disconnect</button>
-        </div>
+    <div class="container" id="">
+        <button type="button" class="butt set disconnect disable" id="rebootId" onclick="reboot()" disabled>Reboot &lt sr &gt</button>
     </div>
-    <div class="container" id="disconnectBluetooth">
-        <button type="button" class="butt disconnect" id="disByBluetooth" onclick="disByBluetooth()">Disconnect</button>
+    <div class="container" id="">
+        <button type="button" class="butt set disconnect" id="disconnectBluetoothId" onclick="disconnectBluetooth()">Disconnect</button>
     </div>
     <div class="container">
+        <p id="displayInfo"></p>
         <p id="deviceInfo"></p>
     </div>
+
+<script src="index.js"></script>
+
     <!-- <div id="resources">
         <h3 style="color: black;">Resources:</h3>
         <p><span class="res">Google Bluetooth Internal Devices: </span> chrome://bluetooth-internals/#devices</p>
@@ -82,7 +90,7 @@
 
     <!-- <script src="bluetooth.js"></script> -->
 
-    <script src="connect.js"></script>
+    <!-- <script src="connect.js"></script> -->
 
     <!-- <script src="serial.js"></script> -->
 

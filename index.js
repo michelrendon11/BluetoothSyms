@@ -16,7 +16,7 @@ let levelRageMatch = "";
 let currentLevel = "";
 let screenMessage = "";
 let settingsMessage = "";
-let textAreaId = document.getElementById("textAreaId");
+const textAreaId = document.getElementById("textAreaId");
 const seeEverythingId = document.getElementById("seeEverythingId");
 const symBluetoothId = document.getElementById("symBluetoothId");
 const connectSymId = document.getElementById("connectSymId");
@@ -142,6 +142,7 @@ async function connectSym(){
         console.log(error);
     }
     let conn = await port.connected;
+    console.log(port);
     console.log(conn);
     if(conn){
         textAreaId.innerHTML += "Connected..." + '\n';
@@ -168,6 +169,7 @@ async function readFromSym(){
             if (value) {
                 console.log(value + '\n');
                 textAreaId.innerHTML += value + '\n';
+                textAreaId.scrollTop = textAreaId.scrollHeight;
             }
             if (done) {
                 reader.releaseLock();
@@ -295,11 +297,11 @@ async function reboot(){
         hhId.disabled = true;
         hhId.classList.add("disable");
         textAreaId.value = '';
+        showMainButtons();
+        hideAllButtons();
     }catch(error){
         console.log(error);
     }
-    showMainButtons();
-    hideAllButtons();
 }
 
 function sendMessages(string){

@@ -33,6 +33,12 @@ const sym23qsId = document.getElementById("sym23qsId");
 const sym23qrId = document.getElementById("sym23qrId");
 const uSymId = document.getElementById("uSymId");
 const rebootId = document.getElementById("rebootId");
+const calibateId = document.getElementById("calibateId");
+const tankHeigthId = document.getElementById("tHeigthId");
+const emptyPointId = document.getElementById("ePointId");
+const waterId = document.getElementById("waterId");
+const fuelId = document.getElementById("fuelId");
+const submitId = document.getElementById("submitId");
 
 function hideMainButtons(){
     seeEverythingId.disabled = true;
@@ -125,6 +131,7 @@ window.onload = function(){
     document.getElementById("deviceInfo").innerHTML = platformInfo;
     document.getElementById("displayInfo").innerHTML = "";
     disconnectBluetoothId.style.display = "none";
+    testDisplay();
 }
 
 async function connectSym(){ 
@@ -188,7 +195,7 @@ async function hh() {
     }catch(error){
         console.log(error);
     }
-    showAllButtons();
+    // showAllButtons();
 }
 
 async function sc(){
@@ -378,6 +385,174 @@ function disconnectBluetooth(){
     disconnectBluetoothId.style.display = "none";
     document.getElementById("displayInfo").innerHTML = "";
     console.log(server); 
+}
+
+function testDisplay(){
+    showAllButtons();
+    hhId.disabled = false;
+    hhId.classList.remove("disable");
+    calibateId.disabled = false;
+    calibateId.classList.remove("disable");
+    tankHeigthId.disabled = false;
+    tankHeigthId.classList.remove("disable");
+    emptyPointId.disabled = false;
+    emptyPointId.classList.remove("disable");
+    waterId.disabled = false;
+    waterId.classList.remove("disable");
+    fuelId.disabled = false;
+    fuelId.classList.remove("disable");
+    submitId.disabled = false;
+    submitId.classList.remove("disable");
+    textAreaId.innerHTML =
+`Connected...
+-->> hh
+HELLO
+SYM U
+Serial# 103780
+
+Please choose an inquire:
+For SYM info: . . . . . <sc>
+To purge SYM: . . . . <sp>
+Put SYM on HOLD:  <sh>
+For SYM readings: . <sd>
+To calibrate: . . . . . . <C,>
+To Replace old SYM:
+<ZS>  <ZM>  <ZR>
+<23QS>  <23QR> 
+SYM U Ori
+ginal  <ZU>
+To finish . . . . . . . . . <SR>
+
+-->> <sc>
+SYM ZS
+P range:  (0 - 32) in H2O)
+V output: (0.50 - 4.10) VDC)
+Firmware Version: 2.01
+Production Date: 05/08/2024 
+
+DONE 
+
+More inquires ? 
+
+Send 'Y' or 'N'
+
+-->> y
+Please choose an inquire:
+For SYM info: . . . .
+. <sc>
+To purge SYM: . . . . <sp>
+Put SYM on HOLD:  <sh>
+For SYM readings: . <sd>
+To calibrate: . . . . . . <C,>
+To Replace old SYM:
+<ZS>  <ZM>  <ZR>
+<23QS>  <23QR> 
+SYM U Original  <ZU>
+To finish . . . . . . . . . <SR>
+
+-->> <sc>
+000,9 Inches of Water
+Voltage Ou
+tput = 0.4 VDC
+
+000,9 Inches of Water
+Voltage Output = 0.4 VDC
+
+000,9 Inches of Water
+Voltage Output = 0.4 VDC
+
+More Data ? 
+
+Sen
+d 'Y' or 'N' 
+
+
+-->> n
+
+DONE 
+
+More inquires ? 
+
+Send 'Y' or 'N'
+
+-->> y
+Please choose an inquire:
+For SYM info: . . . . . <sc>
+To purge SYM: . . . . <sp>
+Put SYM on HOLD:  <sh>
+For SYM readings: . <sd>
+To calibrate: . . . . . . <C,>
+To Replace old SYM:
+<ZS>  <ZM>  <
+ZR>
+<23QS>  <23QR> 
+SYM U Original  <ZU>
+To finish . . . . 
+. . . . . <SR>
+
+-->> <sp>
+PUMP RUNS/n FOR 5 seconds
+
+
+DONE 
+
+More inquires ? 
+
+Send 'Y' or 'N'
+
+-->> y
+Please choose an inquire:
+For SYM info: . . . . . <sc>
+To purge SYM: . . . . <sp>
+Put SYM on HOLD:  <sh>
+For S
+YM readings: . <sd>
+To calibrate: . . . . . . <C,>
+To Replace old SYM:
+<ZS>  <ZM>  <ZR>
+<23QS>  <23QR> 
+SYM U Original  <ZU>
+To finish . . . . . . . . . <SR>
+
+-->> <zs>
+
+DONE 
+
+More inquires ? 
+
+Send 'Y' or 'N'
+
+-->> y
+Please choose an inquire:
+For SYM info: . . . . . <
+sc>
+To purge SYM: . . . . <sp>
+Put SYM on HOLD:  <sh>
+For SYM readings: . <sd>
+To calibrate: . . . . . . <C,>
+To Replace old SYM:
+<ZS>  <ZM>  <ZR>
+<23QS>  <23QR> 
+SYM U Original  <ZU>
+To finish . . . . . . . . . <SR>
+
+-->> <sr>
+
+DONE 
+
+More inquires ? 
+
+Send 'Y' 
+or 'N'
+
+DONE... 
+
+REBOOTING... 
+Do not remove Power 
+from the SYM 
+
+`;
+    textAreaId.scrollTop = textAreaId.scrollHeight;
 }
 
 // ------------------>>>>>>>

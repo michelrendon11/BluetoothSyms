@@ -10,6 +10,7 @@
     <div id="title">
         <h1>TANK SENTRY</h1>
     </div>
+    
     <div class="container" id="findButtons">
         <button type="button" class="butt" id="seeEverythingId" onclick="seeEverything()">See Everyting</button>
         <button type="button" class="butt" id="symBluetoothId" onclick="symBluetooth()">SYM by Bluetooth</button>
@@ -17,47 +18,49 @@
     </div>
     <div class="container">
         <label for="textArea"></label>
-        <textarea name="textArea" title="Sym Responce" id="textAreaId" rows="20" cols="80" disabled wrap="hard"></textarea>
+        <textarea name="textArea" title="Sym Responce" id="textAreaId" rows="20" cols="80" disabled wrap="hard">
+            
+        </textarea>
     </div>
     <div class="container ">
         <p id="displayErrors"></p>
     </div>
     <div class="container" id="">
-        <button type="button" class="butt set disable" id="hhId" onclick="hh()" disabled>Connect / hh</button>
-        <button type="button" class="butt set disable" id="scId" onclick="sc()" disabled>Settings &lt sc &gt</button>
-        <button type="button" class="butt set  disable" id="spId" onclick="sp()" disabled>Purge &lt sp &gt</button>
-        <button type="button" class="butt set disable" id="sdId" onclick="sd()" disabled>Data &lt sd &gt</button>
-        <button type="button" class="butt set disable" id="yId" onclick="y()" disabled>Yes &lt y &gt</button>
-        <button type="button" class="butt set disable" id="nId" onclick="n()" disabled>No &lt n &gt</button>
+        <button type="button" class="butt set disable" id="hhId" onclick="hh()" disabled>Connect/hh</button>
+        <button type="button" class="butt set disable" id="scId" onclick="sc()" disabled>Settings &ltSC&gt</button>
+        <button type="button" class="butt set  disable" id="spId" onclick="sp()" disabled>Purge &ltSP&gt</button>
+        <button type="button" class="butt set disable" id="sdId" onclick="sd()" disabled>Data &ltSD&gt</button>
+        <button type="button" class="butt select disable" id="yId" onclick="y()" disabled>Yes &ltY&gt</button>
+        <button type="button" class="butt select disable" id="nId" onclick="n()" disabled>No &ltN&gt</button>
     </div>
     <div class="container" id="">
-        <button type="button" class="butt select zsSym disable" id="zsSymId" onclick="zsSym()" disabled>&lt ZS &gt</button>
-        <button type="button" class="butt select zmSym disable" id="zmSymId" onclick="zmSym()" disabled>&lt ZM &gt</button>
-        <button type="button" class="butt select zrSym disable" id="zrSymId" onclick="zrSym()" disabled>&lt ZR &gt</button>
-        <button type="button" class="butt select sym23qs disable" id="sym23qsId" onclick="sym23qs()" disabled>&lt 23QS &gt</button>
-        <button type="button" class="butt select sym23qr disable" id="sym23qrId" onclick="sym23qr()" disabled>&lt 23QR &gt</button>
-        <button type="button" class="butt select uSym disable" id="uSymId" onclick="uSym()" disabled>&lt U &gt</button>
+        <button type="button" class="butt select zsSym disable" id="zsSymId" onclick="zsSym()" disabled>&ltZS&gt</button>
+        <button type="button" class="butt select zmSym disable" id="zmSymId" onclick="zmSym()" disabled>&ltZM&gt</button>
+        <button type="button" class="butt select zrSym disable" id="zrSymId" onclick="zrSym()" disabled>&ltZR&gt</button>
+        <button type="button" class="butt select sym23qs disable" id="sym23qsId" onclick="sym23qs()" disabled>&lt23QS&gt</button>
+        <button type="button" class="butt select sym23qr disable" id="sym23qrId" onclick="sym23qr()" disabled>&lt23QR&gt</button>
+        <button type="button" class="butt select uSym disable" id="uSymId" onclick="uSym()" disabled>&ltZU&gt</button>
     </div>
     <div class="container" id="calibration">
         <div class="container3">
-            <button type="button" class="butt set disable" id="" onclick="uSym()" disabled>Calibrate &lt C, &gt</button>
+            <button type="button" class="butt set disable" id="calibateId" onclick="" disabled>Calibrate &ltC,&gt</button>
         </div>
         <div class="container2">
-            <label for="tHeigth">Tank Heigth:</label>
-            <input type="number" id="tHeigth" name="tHeigth" class="disable" value="10" min="10" max="80" required autofocus disabled>
+            <label for="tHeigthId">Tank Heigth:</label>
+            <input type="number" id="tHeigthId" name="tHeigth" class="disable" value="10" min="10" max="80" required autofocus disabled>
         </div>
         <div class="container2">
-            <label for="ePoint">Emtpy Point:</label>
-            <input type="number" id="ePoint" name="ePoint" class="disable" value="0" min="0" max="20" required disabled>
+            <label for="ePointId">Emtpy Point:</label>
+            <input type="number" id="ePointId" name="ePoint" class="disable" value="0" min="0" max="20" required disabled>
         </div>
         <div class="container2">
-            <input type="radio" id="water" name="water/fuel" value="W" class="disable" checked="checked" disabled>
-            <label for="water" class="water disable">Water</label>
-            <input type="radio" id="fuel" name="water/fuel" value="D" disabled>
-            <label for="fuel" class="fuel disable">Fuel</label>
+            <input type="radio" id="waterId" name="water/fuel" value="W" class="disable" checked="checked" disabled>
+            <label for="waterId" class="water">Water</label>
+            <input type="radio" id="fuelId" name="water/fuel" value="D" disabled>
+            <label for="fuelId" class="fuel">Fuel</label>
         </div>
         <div class="container3">
-            <button type="button" class="butt submit disable" id="" onclick="" disabled>Submit</button>
+            <button type="button" class="butt submit disable" id="submitId" onclick="" disabled>Submit</button>
         </div>
     </div>
     <div class="container" id="">

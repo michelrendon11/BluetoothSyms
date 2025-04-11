@@ -1,15 +1,23 @@
 
-body{background-color: rgb(255, 255, 255);}
-#title{ font-family: "aptos"; background-color: rgb(2, 32, 202); width: 100%; height: auto; padding: 0.1rem 0; text-align: center; border-radius: 10px; box-shadow: 0px 2px 5px rgb(0, 0, 0); }
-h1{ color: white; text-shadow: 3px 2px 2px rgb(0, 0, 0); }
+:root {
+    --darkBlue: #23408F;
+    --mediumBlue: #0080c4;
+    --lightBlue: #03B6ED;
+    --textHover: #03ff03;
+    --textClick: #fcf401;
+  }
+
+body{background-color: white;}
+#title{ font-family: "aptos"; background-color: var(--darkBlue); width: 100%; height: auto; padding: 0.1rem 0; text-align: center; border-radius: 10px; box-shadow: 0px 2px 5px black; }
+h1{ color: white; text-shadow: 3px 2px 2px black; }
 
 textarea{ resize: none; background-color: black; color: greenyellow; border-radius: 10px; border-width: 10px; width: 70%;}
 
 .container{display:inline-flexbox; text-align: center; margin-top: 10px; }
 
-.butt{ padding: 10px; font-size: 16px; border-radius: 10px; font-weight: bold; margin-top: 5px;  width: 15rem; margin: 3px; color: white; text-shadow: 2px 2px 2px rgb(0, 0, 0); background-image: linear-gradient(rgb(2, 32, 255), rgb(59, 150, 248)); }
-.butt:hover{ box-shadow: 5px 5px 20px rgb(0, 0, 0); color: rgb(3, 255, 3); }
-.butt:active{ box-shadow: 10px 10px 20px rgb(0, 0, 0); color: rgb(252, 244, 1); }
+.butt{ padding: 10px; font-size: 16px; border-radius: 10px; font-weight: bold; margin-top: 5px;  width: 15rem; margin: 3px; color: white; text-shadow: 2px 2px 2px black; background-image: linear-gradient(var(--darkBlue), var(--lightBlue)); }
+.butt:hover{ box-shadow: 5px 5px 20px black; color: var(--textHover); }
+.butt:active{ box-shadow: 10px 10px 20px black; color: var(--textClick); }
 .select{ width: 7rem; margin-inline: 0.5rem;}
 .set{ width: 9rem; margin-inline: 0.5rem;}
 
